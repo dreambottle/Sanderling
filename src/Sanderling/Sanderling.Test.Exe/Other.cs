@@ -17,7 +17,7 @@ namespace Sanderling.Test.Exe
 		{
 			var Obj0 = new EnumerateReferencedObjectTransitiveTest();
 
-			var Obj1 = new EnumerateReferencedObjectTransitiveTest() { Ref = Obj0, Ref1 = Obj0 };
+			var Obj1 = new EnumerateReferencedObjectTransitiveTest { Ref = Obj0, Ref1 = Obj0 };
 
 			Obj0.Ref = Obj1;
 			Obj0.Ref1 = Obj0;

@@ -9,8 +9,8 @@ namespace Sanderling.UI
 {
     static public class Extension
     {
-		static public StatusIcon.StatusEnum LicenseStatusEnum(this SimpleInterfaceServerDispatcher dispatcher) =>
-			(dispatcher?.AppInterfaceAvailable ?? false) ? StatusIcon.StatusEnum.Accept : StatusIcon.StatusEnum.Reject;
+		//static public StatusIcon.StatusEnum LicenseStatusEnum(this SimpleInterfaceServerDispatcher dispatcher) =>
+		//	(dispatcher?.AppInterfaceAvailable ?? false) ? StatusIcon.StatusEnum.Accept : StatusIcon.StatusEnum.Reject;
 
         static public StatusIcon.StatusEnum ProcessStatusEnum(this SictAuswaalWindowsProcess processChoice) =>
             (processChoice?.ChoosenProcessAtTime.Wert?.BewertungMainModuleDataiNaamePasend ?? false) ?

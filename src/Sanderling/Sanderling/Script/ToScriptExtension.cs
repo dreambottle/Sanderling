@@ -90,7 +90,7 @@ namespace Sanderling.Script
 
 		static public MotionResult WindowToForeground(
 			this IHostToScript sanderling) =>
-			sanderling?.MotionExecute(new Motor.MotionParam()
+			sanderling?.MotionExecute(new Motor.MotionParam
 			{
 				WindowToForeground = true,
 			});
@@ -100,6 +100,12 @@ namespace Sanderling.Script
 
 		static public void WaitForMeasurement(this IHostToScript sanderling) =>
 			sanderling?.MemoryMeasurement?.Value?.VersionString?.ToArray();
+
+        static public void UpdateMeasurementNow(this IHostToScript sanderling)
+        {
+            sanderling.InvalidateMeasurement();
+            sanderling.WaitForMeasurement();
+        }
 
 		static public bool IsCtrlKey(this VirtualKeyCode key) =>
 			VirtualKeyCode.CONTROL == key || VirtualKeyCode.LCONTROL == key || VirtualKeyCode.RCONTROL == key;

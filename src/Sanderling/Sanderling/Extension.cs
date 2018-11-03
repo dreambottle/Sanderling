@@ -213,8 +213,6 @@ namespace Sanderling
 			GetOccludingUIElementAndRemainingRegion(occludedElement, uiTree)
 			?.Where(occludingElementAndRemainingRegion => !(callbackExclude?.Invoke(occludingElementAndRemainingRegion.Key) ?? false))
 			?.Select(occludingElementAndRemainingRegion => occludingElementAndRemainingRegion.Key.Region));
-
-		static public bool SessionDurationRemainingSufficientToStayExposed(this IMemoryMeasurement measurement) =>
-			ExeConfig.StayExposedSessionDurationRemainingMin <= measurement?.SessionDurationRemaining;
+        
 	}
 }

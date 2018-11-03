@@ -9,151 +9,192 @@ using System.Threading.Tasks;
 
 namespace Sanderling.Exe
 {
-	/// <summary>
-	/// This Type must reside in an Assembly that can be resolved by the default assembly resolver.
-	/// </summary>
-	public class InterfaceAppDomainSetup
-	{
-		static InterfaceAppDomainSetup()
-		{
-			BotEngine.Interface.InterfaceAppDomainSetup.Setup();
-		}
-	}
+    /// <summary>
+    /// This Type must reside in an Assembly that can be resolved by the default assembly resolver.
+    /// </summary>
+    public class InterfaceAppDomainSetup
+    {
+        static InterfaceAppDomainSetup()
+        {
+            BotEngine.Interface.InterfaceAppDomainSetup.Setup();
+        }
+    }
 
-	partial class App
-	{
-		readonly SimpleInterfaceServerDispatcher SensorServerDispatcher = new SimpleInterfaceServerDispatcher
-		{
-			InterfaceAppDomainSetupType = typeof(InterfaceAppDomainSetup),
-			InterfaceAppDomainSetupTypeLoadFromMainModule = true,
-		};
+    partial class App
+    {
+        readonly Sensor sensor = new Sensor();
 
-		readonly Sensor sensor = new Sensor();
+        readonly object measurementInvalidationLock = new object();
+        public Int64? fromScriptMeasurementInvalidationTime = null;
+        public bool isMeasurementInvalidated = false;
 
-		readonly object LicenseClientLock = new object();
+        InterfaceAppDomainSetup TriggerSetup = new InterfaceAppDomainSetup();
 
-		LicenseClient LicenseClient => SensorServerDispatcher?.LicenseClient;
+        public UI.InterfaceToEve InterfaceToEveControl => Window?.Main?.Interface;
 
-		InterfaceAppDomainSetup TriggerSetup = new InterfaceAppDomainSetup();
+        public int? EveOnlineClientProcessId =>
+            InterfaceToEveControl?.ProcessChoice?.ChoosenProcessId;
 
-		public UI.InterfaceToEve InterfaceToEveControl => Window?.Main?.Interface;
+        FromProcessMeasurement<MemoryMeasurementEvaluation> MemoryMeasurementLast;
 
-		public int? EveOnlineClientProcessId =>
-			InterfaceToEveControl?.ProcessChoice?.ChoosenProcessId;
+        //readonly Bib3.RateLimit.IRateLimitStateInt MemoryMeasurementRequestRateLimit = new Bib3.RateLimit.RateLimitStateIntSingle();
 
-		FromProcessMeasurement<MemoryMeasurementEvaluation> MemoryMeasurementLast;
+        int MeasurementConsideredYoungAge = 300;
+        int MotionInvalidateMeasurementDelay = 100; //400;
+        int StandardMeasurementThrottleInterval = 3000; // 4000
 
-		Int64? MemoryMeasurementLastAge => GetTimeStopwatch() - MemoryMeasurementLast?.Begin;
+        Int64? FromMotionExecutionMemoryMeasurementTimeMin =>
+            MotorLock.BranchOnTryEnter(() =>
+            {
+                var motionLastTime = MotionLastTime;
 
-		public Int64? FromScriptMeasurementInvalidationTime = null;
+                if (!motionLastTime.HasValue)
+                    return null;
 
-		readonly Bib3.RateLimit.IRateLimitStateInt MemoryMeasurementRequestRateLimit = new Bib3.RateLimit.RateLimitStateIntSingle();
+                return motionLastTime.Value + MotionInvalidateMeasurementDelay;
 
-		int MotionInvalidateMeasurementDelay = 400;
+            },
+            () => (Int64?)Int64.MaxValue);
 
-		Int64? FromMotionExecutionMemoryMeasurementTimeMin =>
-			MotorLock.BranchOnTryEnter(() =>
-			{
-				var motionLastTime = MotionLastTime;
+        Int64? MeasurementRequiredDelayTime => new[]
+            {
+                FromMotionExecutionMemoryMeasurementTimeMin,
+                fromScriptMeasurementInvalidationTime,
+            }.Max();
 
-				if (!motionLastTime.HasValue)
-					return null;
+        Int64? ThrottledTimeForMeasurement
+        {
+            get
+            {
+                lock (measurementInvalidationLock)
+                {
+                    if (isMeasurementInvalidated)
+                    {
+                        return this.MeasurementRequiredDelayTime;
+                    }
+                }
+                return 0;
+                //return (MemoryMeasurementLast?.Begin + StandardMeasurementThrottleInterval) ?? 0;
+            }
+        }
 
-				return motionLastTime.Value + MotionInvalidateMeasurementDelay;
+        // deprecate
+        //FromProcessMeasurement<MemoryMeasurementEvaluation> MemoryMeasurementIfRecentEnough
+        //{
+        //    get
+        //    {
+        //        var MemoryMeasurementLast = this.MemoryMeasurementLast;
+        //        var MeasurementRecentEnoughTime = this.MeasurementRequiredDelayTime;
 
-			},
-			() => (Int64?)Int64.MaxValue);
+        //        if (MemoryMeasurementLast?.Begin < MeasurementRecentEnoughTime)
+        //            return null;
 
-		Int64? MeasurementRecentEnoughTime => new[]
-			{
-				FromMotionExecutionMemoryMeasurementTimeMin,
-				FromScriptMeasurementInvalidationTime,
-			}.Max();
+        //        return MemoryMeasurementLast;
+        //    }
+        //}
 
-		Int64? RequestedMeasurementTime
-		{
-			get
-			{
-				var MeasurementRecentEnoughTime = this.MeasurementRecentEnoughTime;
-				var MemoryMeasurementLast = this.MemoryMeasurementLast;
+        FromProcessMeasurement<MemoryMeasurementEvaluation> FromScriptRequestMemoryMeasurementEvaluation()
+        {
+            lock (measurementInvalidationLock)
+            {
+                if (!isMeasurementInvalidated)
+                {
+                    // Ideally, should get rid of this code.
+                    if (GetTimeStopwatch() - MemoryMeasurementLast?.End < MeasurementConsideredYoungAge)
+                    {
+                        return MemoryMeasurementLast;
+                    }
+                    else
+                    {
+                        // Invalidate with a standard interval from last measurement
+                        isMeasurementInvalidated = true;
+                        fromScriptMeasurementInvalidationTime = MemoryMeasurementLast?.Begin + StandardMeasurementThrottleInterval;
+                    }
+                }
+            }
 
-				if (MemoryMeasurementLast?.Begin < MeasurementRecentEnoughTime)
-					return MeasurementRecentEnoughTime;
+            for (;;)
+            {
+                lock (measurementInvalidationLock)
+                {
+                    if (!isMeasurementInvalidated)
+                    {
+                        return MemoryMeasurementLast;
+                    }
+                }
+                Thread.Sleep(75);
+            }
 
-				return (MemoryMeasurementLast?.End + 4000) ?? 0;
-			}
-		}
+            //var BeginTime = GetTimeStopwatch();
 
-		FromProcessMeasurement<MemoryMeasurementEvaluation> MemoryMeasurementIfRecentEnough
-		{
-			get
-			{
-				var MemoryMeasurementLast = this.MemoryMeasurementLast;
-				var MeasurementRecentEnoughTime = this.MeasurementRecentEnoughTime;
+            //while (true)
+            //{
+            //    var MemoryMeasurementIfRecentEnough = this.MemoryMeasurementIfRecentEnough;
 
-				if (MemoryMeasurementLast?.Begin < MeasurementRecentEnoughTime)
-					return null;
+            //    if (null != MemoryMeasurementIfRecentEnough)
+            //        return MemoryMeasurementIfRecentEnough;
 
-				return MemoryMeasurementLast;
-			}
-		}
+            //    var RequestAge = GetTimeStopwatch() - BeginTime;
 
-		FromProcessMeasurement<MemoryMeasurementEvaluation> FromScriptRequestMemoryMeasurementEvaluation()
-		{
-			var BeginTime = GetTimeStopwatch();
+            //    if (Sanderling.Script.Impl.HostToScript.FromScriptRequestMemoryMeasurementDelayMax < RequestAge)
+            //        return null;    //	Timeout
 
-			while (true)
-			{
-				var MemoryMeasurementIfRecentEnough = this.MemoryMeasurementIfRecentEnough;
+            //    Thread.Sleep(44);
+            //}
+        }
 
-				if (null != MemoryMeasurementIfRecentEnough)
-					return MemoryMeasurementIfRecentEnough;
+        void FromScriptInvalidateMeasurement(int delayToMeasurementMilli)
+        {
+            // Not sure if the call will come from a different thread. Locking just in case.
+            lock (measurementInvalidationLock)
+            {
+                fromScriptMeasurementInvalidationTime = Math.Max(
+                    fromScriptMeasurementInvalidationTime ?? int.MinValue,
+                    GetTimeStopwatch() + Math.Min(delayToMeasurementMilli, 10000)
+                    );
+                isMeasurementInvalidated = true;
+            }
+        }
 
-				var RequestAge = GetTimeStopwatch() - BeginTime;
+        public void TakeMeasurementNow()
+        {
+            if (EveOnlineClientProcessId.HasValue)
+            {
+                var EveOnlineClientProcessId = this.EveOnlineClientProcessId;
+                Task.Run(() => MeasurementMemoryTake(EveOnlineClientProcessId.Value, null /*Environment.TickCount*/));
+            }
+        }
 
-				if (Sanderling.Script.Impl.HostToScript.FromScriptRequestMemoryMeasurementDelayMax < RequestAge)
-					return null;    //	Timeout
+        public void TakeMeasurementThrottled()
+        {
+            var throttledTimeForMeasurement = this.ThrottledTimeForMeasurement ?? 0;
+            if (EveOnlineClientProcessId.HasValue
+                && throttledTimeForMeasurement <= GetTimeStopwatch()
+                )
+            {
+                var eveOnlineClientProcessId = this.EveOnlineClientProcessId;
+                //MeasurementMemoryTake(eveOnlineClientProcessId.Value, throttledTimeForMeasurement);
+                Task.Run(() => MeasurementMemoryTake(eveOnlineClientProcessId.Value, throttledTimeForMeasurement));
+            }
+        }
 
-				Thread.Sleep(44);
-			}
-		}
+        void MeasurementMemoryTake(int processId, Int64? measurementBeginTimeMinMilli)
+        {
+            var MeasurementRaw = measurementBeginTimeMinMilli.HasValue
+                ? sensor.MeasurementTake(processId, measurementBeginTimeMinMilli.Value)
+                : sensor.MeasurementTakeNewRequest(processId)?.MemoryMeasurement;
 
-		void FromScriptInvalidateMeasurement(int delayToMeasurementMilli)
-		{
-			FromScriptMeasurementInvalidationTime =
-				Math.Max(FromScriptMeasurementInvalidationTime ?? int.MinValue, GetTimeStopwatch() + Math.Min(delayToMeasurementMilli, 10000));
-		}
+            if (null == MeasurementRaw)
+                return;
 
-		void InterfaceExchange()
-		{
-			LicenseClientExchange();
+            lock (measurementInvalidationLock)
+            {
+                MemoryMeasurementLast = MeasurementRaw?.MapValue(value => new Interface.MemoryMeasurementEvaluation(
+                    MeasurementRaw,
+                    MemoryMeasurementLast?.Value?.MemoryMeasurementAccumulation as Accumulator.MemoryMeasurementAccumulator));
 
-			var EveOnlineClientProcessId = this.EveOnlineClientProcessId;
-
-			var RequestedMeasurementTime = this.RequestedMeasurementTime ?? 0;
-
-			if (EveOnlineClientProcessId.HasValue && RequestedMeasurementTime <= GetTimeStopwatch())
-				if (MemoryMeasurementRequestRateLimit.AttemptPass(GetTimeStopwatch(), 700))
-					Task.Run(() => MeasurementMemoryTake(EveOnlineClientProcessId.Value, RequestedMeasurementTime));
-		}
-
-		void LicenseClientExchange()
-		{
-			var licenseClientConfig = (ConfigDefaultConstruct()?.LicenseClient).CompletedWithDefault().WithRequestLicenseKey(ExeConfig.ConfigLicenseKeyDefault);
-
-			Task.Run(() => SensorServerDispatcher?.Exchange(licenseClientConfig, SensorServerDispatcher.AppInterfaceAvailable ? 1000 : (int?)null));
-		}
-
-		void MeasurementMemoryTake(int processId, Int64 measurementBeginTimeMinMilli)
-		{
-			var MeasurementRaw = sensor.MeasurementTake(processId, measurementBeginTimeMinMilli);
-
-			if (null == MeasurementRaw)
-				return;
-
-			MemoryMeasurementLast = MeasurementRaw?.MapValue(value => new Interface.MemoryMeasurementEvaluation(
-				MeasurementRaw,
-				MemoryMeasurementLast?.Value?.MemoryMeasurementAccumulation as Accumulator.MemoryMeasurementAccumulator));
-		}
-	}
+                isMeasurementInvalidated = false;
+            }
+        }
+    }
 }

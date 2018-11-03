@@ -61,13 +61,13 @@ namespace Optimat.EveOnline
 			}
 		}
 
-		public GbsAstInfo[] MengeGbsWurzelInfo
+		public GbsNodeInfo[] MengeGbsWurzelInfo
 		{
 			private set;
 			get;
 		}
 
-		public GbsAstInfo GbsWurzelHauptInfo
+		public GbsNodeInfo GbsWurzelHauptInfo
 		{
 			get
 			{
@@ -87,12 +87,12 @@ namespace Optimat.EveOnline
 
 				return
 					MengeGbsWurzelInfo
-					?.OrderByDescending((Wurzel) => Wurzel.MengeChildAstTransitiiveHüle()?.Count() ?? 0)
+					?.OrderByDescending((Wurzel) => Wurzel.EnumerateChildNodeTransitiveHüle()?.Count() ?? 0)
 					?.FirstOrDefault();
 			}
 		}
 
-		public GbsAstInfo[] ScritLezteMengeAstGeändert
+		public GbsNodeInfo[] ScritLezteMengeAstGeändert
 		{
 			private set;
 			get;
@@ -181,7 +181,7 @@ namespace Optimat.EveOnline
 			public int? TiifeScrankeMax;
 			public int? GbsAstAnzaalScrankeMax;
 
-			public GbsAstInfo Info;
+			public GbsNodeInfo Info;
 			//	public SictInBerecnungAst[] MengeChild;
 
 			public SictInBerecnungAst(
@@ -190,7 +190,7 @@ namespace Optimat.EveOnline
 				int? TiifeScrankeMax = null,
 				int? GbsAstAnzaalScrankeMax = null,
 				Optimat.EveOnline.SictGbsAstAusRenderObjectMemBlok GbsFensterBlok = null,
-				GbsAstInfo Info = null)
+				GbsNodeInfo Info = null)
 			{
 				this.Parent = Parent;
 
@@ -297,11 +297,11 @@ namespace Optimat.EveOnline
 								return;
 							}
 
-							var InternListeWurzelInfo = new List<GbsAstInfo>();
+							var InternListeWurzelInfo = new List<GbsNodeInfo>();
 
 							var GbsMengeWurzelObj = ProzesAuswertZuusctand.GbsMengeWurzelObj;
 
-							var MengeAstInfoGeändert = new List<GbsAstInfo>();
+							var MengeAstInfoGeändert = new List<GbsNodeInfo>();
 
 							try
 							{
@@ -442,12 +442,12 @@ namespace Optimat.EveOnline
 
 												if (null != Laage)
 												{
-													AstInfo.LaageInParent = new Vektor2DSingle(Laage[0], Laage[1]);
+													AstInfo.PositionInParent = new Vector2DSingle(Laage[0], Laage[1]);
 												}
 
 												if (null != Grööse)
 												{
-													AstInfo.Grööse = new Vektor2DSingle(Grööse[0], Grööse[1]);
+													AstInfo.Grööse = new Vector2DSingle(Grööse[0], Grööse[1]);
 												}
 											}
 										}
@@ -1665,7 +1665,7 @@ namespace Optimat.EveOnline
 
 							DictEntryBackgroundListDictEntryListChildrenObj.Aktualisiire(AusProzesLeeser, out tBool, Zait);
 
-							var BackgroundList = new List<GbsAstInfo>();
+							var BackgroundList = new List<GbsNodeInfo>();
 
 							foreach (var BackgroundAdr in DictEntryBackgroundListDictEntryListChildrenObj.ListeItemRef.EmptyIfNull())
 							{
@@ -1779,10 +1779,10 @@ namespace Optimat.EveOnline
 			}
 		}
 
-		static public IEnumerable<KeyValuePair<InGbsPfaad, GbsAstInfo[]>>
-			MengeGbsAstSuuceNaacPfaad(IEnumerable<InGbsPfaad> MengeNaacGbsAstPfaad,
-			int ProcessId,
-			EveOnline.SictProzesAuswertZuusctand GbsSuuceWurzel)
+		static public IEnumerable<KeyValuePair<InGbsPath, GbsNodeInfo[]>>
+			MengeGbsAstSuuceNaacPfaad(IEnumerable<InGbsPath> MengeNaacGbsAstPfaad,
+			        int ProcessId,
+			        EveOnline.SictProzesAuswertZuusctand GbsSuuceWurzel)
 		{
 			var MengeNaacGbsAstPfaadArray = MengeNaacGbsAstPfaad?.ToArray();
 
@@ -1798,9 +1798,9 @@ namespace Optimat.EveOnline
 
 			var SuuceListePfaadUndSuuceWurzelAdrese =
 				MengeNaacGbsAstPfaadArray
-				.Select((NaacGbsAstPfaad) => new KeyValuePair<InGbsPfaad, Int64?>(NaacGbsAstPfaad, NaacGbsAstPfaad.WurzelAstAdrese))
+				.Select((NaacGbsAstPfaad) => new KeyValuePair<InGbsPath, Int64?>(NaacGbsAstPfaad, NaacGbsAstPfaad.rootNodeAddress))
 				.Where((PfaadUndSuuceWurzelAdrese) => PfaadUndSuuceWurzelAdrese.Value.HasValue)
-				.Select((PfaadUndSuuceWurzelAdrese) => new KeyValuePair<InGbsPfaad, Int64>(PfaadUndSuuceWurzelAdrese.Key, PfaadUndSuuceWurzelAdrese.Value.Value))
+				.Select((PfaadUndSuuceWurzelAdrese) => new KeyValuePair<InGbsPath, Int64>(PfaadUndSuuceWurzelAdrese.Key, PfaadUndSuuceWurzelAdrese.Value.Value))
 				.ToList();
 
 			var SuuceMengeWurzelAdrese =
@@ -1812,14 +1812,14 @@ namespace Optimat.EveOnline
 
 			foreach (var SuucePfaadUndSuuceWurzelAdrese in SuuceListePfaadUndSuuceWurzelAdrese)
 			{
-				var SuucePfaad = SuucePfaadUndSuuceWurzelAdrese.Key;
+				var searchPath = SuucePfaadUndSuuceWurzelAdrese.Key;
 
-				if (null == SuucePfaad)
+				if (null == searchPath)
 				{
 					continue;
 				}
 
-				var PfaadListeAstAdrese = SuucePfaad.ListeAstAdrese;
+				var PfaadListeAstAdrese = searchPath.nodeAddressList;
 
 				if (null == PfaadListeAstAdrese)
 				{
@@ -1829,7 +1829,7 @@ namespace Optimat.EveOnline
 				MengeAstSuuceFortsazHerkunftAdrese.AddRange(PfaadListeAstAdrese);
 			}
 
-			GbsAstInfo[] MengeGbsWurzelInfo = null;
+			GbsNodeInfo[] MengeGbsWurzelInfo = null;
 
 			if (!SuuceMengeWurzelAdrese.IsNullOrEmpty())
 			{
@@ -1848,15 +1848,15 @@ namespace Optimat.EveOnline
 				MengeGbsWurzelInfo = ScnapscusAuswert.MengeGbsWurzelInfo;
 			}
 
-			var ListeGbsAstPfaadMitGbsAstBlatInfo = new KeyValuePair<InGbsPfaad, GbsAstInfo[]>[MengeNaacGbsAstPfaadArray.Length];
+			var ListeGbsAstPfaadMitGbsAstBlatInfo = new KeyValuePair<InGbsPath, GbsNodeInfo[]>[MengeNaacGbsAstPfaadArray.Length];
 
 			for (int NaacGbsAstPfaadIndex = 0; NaacGbsAstPfaadIndex < MengeNaacGbsAstPfaadArray.Length; NaacGbsAstPfaadIndex++)
 			{
 				var NaacGbsAstPfaad = MengeNaacGbsAstPfaadArray[NaacGbsAstPfaadIndex];
 
-				var ListeAstAdrese = NaacGbsAstPfaad.ListeAstAdrese;
+				var ListeAstAdrese = NaacGbsAstPfaad.nodeAddressList;
 
-				GbsAstInfo[] PfaadListeAst = null;
+				GbsNodeInfo[] PfaadListeAst = null;
 
 				try
 				{
@@ -1874,17 +1874,17 @@ namespace Optimat.EveOnline
 
 					if (ListeAstAdrese.IsNullOrEmpty())
 					{
-						PfaadListeAst = new GbsAstInfo[] { PfaadWurzel };
+						PfaadListeAst = new GbsNodeInfo[] { PfaadWurzel };
 					}
 
 					var PfaadBlatAdrese = ListeAstAdrese.LastOrDefault();
 
 					PfaadListeAst =
-						PfaadWurzel.SuuceFlacMengeAstMitPfaadFrüheste(KandidaatBlat => KandidaatBlat.PyObjAddress == PfaadBlatAdrese);
+						PfaadWurzel.FindFirstInTreeWhere(KandidaatBlat => KandidaatBlat.PyObjAddress == PfaadBlatAdrese);
 				}
 				finally
 				{
-					ListeGbsAstPfaadMitGbsAstBlatInfo[NaacGbsAstPfaadIndex] = new KeyValuePair<InGbsPfaad, GbsAstInfo[]>(NaacGbsAstPfaad, PfaadListeAst);
+					ListeGbsAstPfaadMitGbsAstBlatInfo[NaacGbsAstPfaadIndex] = new KeyValuePair<InGbsPath, GbsNodeInfo[]>(NaacGbsAstPfaad, PfaadListeAst);
 				}
 			}
 

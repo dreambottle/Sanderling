@@ -9,7 +9,7 @@ namespace Optimat.EveOnline
 {
 	public abstract class SictProcessAuswertWurzelSuuce : Optimat.EveOnline.SictProzesAuswertZuusctand
 	{
-		virtual public void Berecne()
+		virtual public void Read()
 		{
 		}
 
@@ -19,7 +19,7 @@ namespace Optimat.EveOnline
 			if (null == suuce)
 				return null;
 
-			suuce.Berecne();
+			suuce.Read();
 
 			return suuce;
 		}
@@ -35,7 +35,7 @@ namespace Optimat.EveOnline
 			this.MemoryReader = memoryReader;
 		}
 
-		static Int64 DebugAdrese = -1;
+		//static Int64 DebugAdrese = -1;
 
 		static public KeyValuePair<Int64, Int64>[] ListeScpaicerberaicGültigeZiil(IMemoryReader memoryReader)
 		{
@@ -66,7 +66,7 @@ namespace Optimat.EveOnline
 			return null;
 		}
 
-		override public void Berecne()
+		override public void Read()
 		{
 			InternDauer.BeginSezeJezt();
 

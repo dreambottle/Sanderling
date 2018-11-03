@@ -38,7 +38,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (!(entryAst?.VisibleIncludingInheritance ?? false))
 				return null;
 
-			var ChildTransitive = entryAst.MengeChildAstTransitiiveHüle()?.ToArray();
+			var ChildTransitive = entryAst.EnumerateChildNodeTransitiveHüle()?.ToArray();
 
 			var ListEntryAuswert = new SictAuswertGbsListEntry(entryAst, listeScrollHeader, regionConstraint, ListEntryTrenungZeleTypEnum.InLabelTab);
 

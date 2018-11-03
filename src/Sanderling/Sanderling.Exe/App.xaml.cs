@@ -8,7 +8,7 @@ namespace Sanderling.Exe
 {
 	public partial class App : Application
 	{
-		static public Int64 GetTimeStopwatch() => Bib3.Glob.StopwatchZaitMiliSictInt();
+		static public Int64 GetTimeStopwatch() => Environment.TickCount;
 
 		public MainWindow Window => base.MainWindow as MainWindow;
 
@@ -117,11 +117,13 @@ namespace Sanderling.Exe
 
 			Motor = GetMotor();
 
-			InterfaceExchange();
+			TakeMeasurementThrottled();
 
 			UpdateBotOperationPauseContinueToggleButton();
 
 			UIPresent();
+
+            // TODO call custom Bot update cycle here.
 		}
 
 		void ContinueOrStartBotOperation()

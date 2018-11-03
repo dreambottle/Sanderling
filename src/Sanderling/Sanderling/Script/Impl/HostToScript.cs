@@ -8,7 +8,7 @@ namespace Sanderling.Script.Impl
 {
 	public class HostToScript : IHostToScript
 	{
-		public const int FromScriptRequestMemoryMeasurementDelayMax = 4000;
+		public const int FromScriptRequestMemoryMeasurementDelayMax = 15000;
 
 		public Func<FromProcessMeasurement<Interface.MemoryMeasurementEvaluation>> MemoryMeasurementFunc;
 
@@ -20,7 +20,7 @@ namespace Sanderling.Script.Impl
 
         public Func<IntPtr> WindowHandleFunc;
 
-		public FromProcessMeasurement<MemoryStruct.IMemoryMeasurement> MemoryMeasurement =>
+        public FromProcessMeasurement<MemoryStruct.IMemoryMeasurement> MemoryMeasurement =>
 			MemoryMeasurementFunc?.Invoke()?.MapValue(evaluation => evaluation?.MemoryMeasurement);
 
 		public FromProcessMeasurement<Parse.IMemoryMeasurement> MemoryMeasurementParsed =>

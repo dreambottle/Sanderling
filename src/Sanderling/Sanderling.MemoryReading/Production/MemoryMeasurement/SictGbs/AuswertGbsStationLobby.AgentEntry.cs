@@ -162,12 +162,12 @@ namespace Optimat.EveOnline.AuswertGbs
 						AstTextContTextMengeLabel
 						.Where((Kandidaat) =>
 							{
-								if (!Kandidaat.LaageInParent.HasValue)
+								if (!Kandidaat.PositionInParent.HasValue)
 								{
 									return false;
 								}
 
-								return Kandidaat.LaageInParent.Value.A < AstTextContText.Grööse.Value.A * 0.5;
+								return Kandidaat.PositionInParent.Value.A < AstTextContText.Grööse.Value.A * 0.5;
 							})
 						.ToArray();
 				}

@@ -371,7 +371,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var SelectedRightControlViewButton =
 				AuswaalReczInventorySictMengeButtonAst
-				?.Select(ast => ast?.MengeChildAstTransitiiveHüle()?.OfType<UINodeInfoInTree>().GröösteSpriteAst()?.AlsSprite())
+				?.Select(ast => ast?.EnumerateChildNodeTransitiveHüle()?.OfType<UINodeInfoInTree>().GröösteSpriteAst()?.AlsSprite())
 				?.WhereNotDefault()
 				?.OrdnungLabel()
 				?.ToArray();

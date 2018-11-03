@@ -24,7 +24,7 @@ namespace Optimat.EveOnline.AuswertGbs
 		static public Regex RegexGbsAstPyObjTypNameButton = new Regex("Button|StationServiceBtn", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		static public bool PyObjTypNameMatchesRegex(
-			this GbsAstInfo node,
+			this GbsNodeInfo node,
 			Regex regex)
 		{
 			var PyObjTypName = node?.PyObjTypName;
@@ -36,27 +36,27 @@ namespace Optimat.EveOnline.AuswertGbs
 		}
 
 		static public bool PyObjTypNameMatchesRegexPattern(
-			this GbsAstInfo uiNode,
+			this GbsNodeInfo uiNode,
 			string regexPattern,
 			RegexOptions regexOptions = RegexOptions.None) =>
 			uiNode.PyObjTypNameMatchesRegex(regexPattern.AlsRegex(regexOptions));
 
 		static public bool PyObjTypNameMatchesRegexPatternIgnoreCase(
-			this GbsAstInfo uiNode,
+			this GbsNodeInfo uiNode,
 			string regexPattern,
 			RegexOptions regexOptions = RegexOptions.None) =>
 			uiNode.PyObjTypNameMatchesRegexPattern(regexPattern, RegexOptions.IgnoreCase | regexOptions);
 
 		static public bool PyObjTypNameIsContainer(
-			this GbsAstInfo uiNode) =>
+			this GbsNodeInfo uiNode) =>
 			PyObjTypNameMatchesRegex(uiNode, RegexGbsAstPyObjTypNameContainer);
 
 		static public bool PyObjTypNameIsIcon(
-			this GbsAstInfo uiNode) =>
+			this GbsNodeInfo uiNode) =>
 			PyObjTypNameMatchesRegex(uiNode, RegexGbsAstPyObjTypNameIcon);
 
 		static public bool PyObjTypNameIsButton(
-			this GbsAstInfo uiNode) =>
+			this GbsNodeInfo uiNode) =>
 			PyObjTypNameMatchesRegex(uiNode, RegexGbsAstPyObjTypNameButton);
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Optimat.EveOnline.AuswertGbs
 		static Regex PyTypeNameSpriteRegex = "sprite".AlsRegexIgnoreCaseCompiled();
 
 		static public bool PyObjTypNameIsSprite(
-			this GbsAstInfo uiNode) =>
+			this GbsNodeInfo uiNode) =>
 			uiNode.PyObjTypNameMatchesRegex(PyTypeNameSpriteRegex);
 
 		/// <summary>

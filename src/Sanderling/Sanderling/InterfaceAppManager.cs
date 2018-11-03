@@ -18,14 +18,14 @@ namespace Sanderling
 			interfaceAppManager?.ClientRequest(new ToInterfaceRequest())?.MemoryMeasurementInProgress;
 
 		static public FromInterfaceResponse MeasurementTakeRequest(
-			this Sensor interfaceAppManager,
+			this Sensor sensor,
 			int processId,
 			Int64 measurementBeginTimeMinMilli)
 		{
-			while (interfaceAppManager?.MeasurementInProgress() ?? false)
+			while (sensor?.MeasurementInProgress() ?? false)
 				Thread.Sleep(11);
 
-			var processIdLast = interfaceAppManager?.ClientRequest(new ToInterfaceRequest
+			var processIdLast = sensor?.ClientRequest(new ToInterfaceRequest
 			{
 				MemoryMeasurementInitGetLast = true,
 			})
@@ -33,7 +33,7 @@ namespace Sanderling
 
 			var MemoryMeasurementInitReuse = processIdLast == processId;
 
-			var Response = interfaceAppManager?.ClientRequest(new ToInterfaceRequest
+			var response = sensor?.ClientRequest(new ToInterfaceRequest
 			{
 				MemoryMeasurementInitTake = MemoryMeasurementInitReuse ? null : new MemoryMeasurementInitParam
 				{
@@ -43,13 +43,13 @@ namespace Sanderling
 				MemoryMeasurementGetLast = true,
 			});
 
-			if (!(measurementBeginTimeMinMilli <= Response?.MemoryMeasurement?.Begin))
-				Response = interfaceAppManager?.ClientRequest(new ToInterfaceRequest
+			if (!(measurementBeginTimeMinMilli <= response?.MemoryMeasurement?.Begin))
+				response = sensor?.ClientRequest(new ToInterfaceRequest
 				{
 					MemoryMeasurementTake = true,
 				});
 
-			return Response;
+			return response;
 		}
 
 		static public FromProcessMeasurement<MemoryStruct.IMemoryMeasurement> MeasurementTake(
@@ -61,6 +61,6 @@ namespace Sanderling
 		static public FromInterfaceResponse MeasurementTakeNewRequest(
 			this Sensor interfaceAppManager,
 			int processId) =>
-			MeasurementTakeRequest(interfaceAppManager, processId, Bib3.Glob.StopwatchZaitMiliSictInt());
+			MeasurementTakeRequest(interfaceAppManager, processId, Environment.TickCount);
 	}
 }

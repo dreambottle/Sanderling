@@ -10,7 +10,7 @@ namespace Sanderling.Script.Impl
 {
 	public class ScriptRunClient : IScriptRunClient
 	{
-		static public Int64 GetTimeStopwatch() => Bib3.Glob.StopwatchZaitMiliSictInt();
+		static public Int64 GetTimeStopwatch() => Environment.TickCount;
 
 		public Func<FromProcessMeasurement<MemoryMeasurementEvaluation>> MemoryMeasurementLastDelegate;
 
@@ -27,9 +27,9 @@ namespace Sanderling.Script.Impl
 		public Func<MotionParam, MotionResult> FromScriptMotionExecute;
 
 		public ScriptRun.ToScriptGlobals ToScriptGlobals =>
-			new ToScriptGlobals()
+			new ToScriptGlobals
 			{
-				Sanderling = new HostToScript()
+				Sanderling = new HostToScript
 				{
 					MemoryMeasurementFunc = () =>
 					{

@@ -56,13 +56,13 @@ namespace Optimat.EveOnline.AuswertGbs
 				return null;
 
 			var StatusIconSprite =
-				ast.MengeChildAstTransitiiveHüle()
+				ast.EnumerateChildNodeTransitiveHüle()
 				?.OfType<UINodeInfoInTree>()
 				?.FirstOrDefault(k => k.PyObjTypNameIsSprite() && (k.PyObjTypName?.ToLower().Contains("status") ?? false))
 				?.AlsSprite();
 
 			var SetFlagWithStateIconNode =
-				ast?.MengeChildAstTransitiiveHüle()
+				ast?.EnumerateChildNodeTransitiveHüle()
 				?.OfType<UINodeInfoInTree>()
 				?.Where(k => k?.PyObjTypNameMatchesRegexPatternIgnoreCase("FlagIconWithState") ?? false)
 				?.ToArray();
@@ -74,7 +74,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					var FlagIcon = flagNode.AlsSprite();
 
 					var childSprite =
-						flagNode?.MengeChildAstTransitiiveHüle()?.OfType<UINodeInfoInTree>()
+						flagNode?.EnumerateChildNodeTransitiveHüle()?.OfType<UINodeInfoInTree>()
 						?.Where(k => k.PyObjTypNameIsSprite())
 						?.Select(k => k?.AlsSprite())?.WhereNotDefault()?.FirstOrDefault();
 

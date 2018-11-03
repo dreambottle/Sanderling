@@ -8,7 +8,7 @@ using Sanderling.MemoryReading.Production;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
-	public class UINodeInfoInTree : GbsAstInfo
+	public class UINodeInfoInTree : GbsNodeInfo
 	{
 		/// <summary>
 		/// Index of this node in the list of children of its parent.
@@ -25,9 +25,9 @@ namespace Optimat.EveOnline.AuswertGbs
 
 		new public UINodeInfoInTree[] ListChild;
 
-		public Vektor2DSingle? FromParentLocation;
+		public Vector2DSingle? FromParentLocation;
 
-		override public IEnumerable<GbsAstInfo> GetListChild() => ListChild;
+		override public IEnumerable<GbsNodeInfo> GetChildList() => ListChild;
 	}
 
 

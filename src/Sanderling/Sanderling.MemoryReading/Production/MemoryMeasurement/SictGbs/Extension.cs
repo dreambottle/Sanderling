@@ -13,31 +13,33 @@ namespace Optimat.EveOnline.AuswertGbs
 	static public class Extension
 	{
 		static public Vektor2DInt AlsVektor2DInt(
-			this Vektor2DSingle vektor2DSingle) =>
-			new Vektor2DInt((Int64)vektor2DSingle.A, (Int64)vektor2DSingle.B);
+			this Vector2DSingle vector2DSingle) =>
+			new Vektor2DInt((Int64)vector2DSingle.A, (Int64)vector2DSingle.B);
 
 		static readonly Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer
 			KonvertGbsAstInfoRictliinieMitScatescpaicer =
 			new Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer(
 				Bib3.RefNezDiferenz.NewtonsoftJson.SictMengeTypeBehandlungRictliinieNewtonsoftJson.KonstruktMengeTypeBehandlungRictliinie(
 				new KeyValuePair<Type, Type>[]{
-					new KeyValuePair<Type, Type>(typeof(GbsAstInfo), typeof(UINodeInfoInTree)),
-					new KeyValuePair<Type, Type>(typeof(GbsAstInfo[]), typeof(UINodeInfoInTree[])),
+					new KeyValuePair<Type, Type>(typeof(GbsNodeInfo), typeof(UINodeInfoInTree)),
+					new KeyValuePair<Type, Type>(typeof(GbsNodeInfo[]), typeof(UINodeInfoInTree[])),
 				}));
 
 		static public UINodeInfoInTree SictAuswert(
-			this GbsAstInfo gbsBaum)
+			this GbsNodeInfo gbsBaum)
 		{
 			if (null == gbsBaum)
 				return null;
 
-			var GbsBaumScpez =
+            //var treeCopy = new Bib3.RefBaumKopii.Param(null, KonvertGbsAstInfoRictliinieMitScatescpaicer);
+
+            var GbsBaumScpez =
 				SictRefNezKopii.ObjektKopiiErsctele(
-				gbsBaum,
-				null,
-				new Bib3.RefBaumKopii.Param(null, KonvertGbsAstInfoRictliinieMitScatescpaicer),
-				null,
-				null)
+                    gbsBaum,
+				    null,
+                    new Bib3.RefBaumKopii.Param(null, KonvertGbsAstInfoRictliinieMitScatescpaicer),
+				    null,
+				    null)
 				as UINodeInfoInTree;
 
 			if (null == GbsBaumScpez)
@@ -50,8 +52,9 @@ namespace Optimat.EveOnline.AuswertGbs
 			return GbsBaumScpez;
 		}
 
+        /// Senseo snapshot?
 		static public IMemoryMeasurement SensorikScnapscusKonstrukt(
-			this Optimat.EveOnline.GbsAstInfo gbsBaum,
+			this Optimat.EveOnline.GbsNodeInfo gbsBaum,
 			int? sessionDurationRemaining)
 		{
 			var GbsBaumSictAuswert = gbsBaum.SictAuswert();
@@ -71,20 +74,20 @@ namespace Optimat.EveOnline.AuswertGbs
 		{
 			return
 				suuceWurzel.EnumerateNodeFromTreeBFirst(
-				node => node?.GetListChild()?.OfType<UINodeInfoInTree>(),
+				node => node?.GetChildList()?.OfType<UINodeInfoInTree>(),
 				tiifeMax,
 				tiifeMin);
 		}
 
-		static public Vektor2DSingle? LaagePlusVonParentErbeLaage(
+		static public Vector2DSingle? LaagePlusVonParentErbeLaage(
 			this UINodeInfoInTree node)
 		{
 			var VonParentErbeLaage = node?.FromParentLocation;
 
 			if (!VonParentErbeLaage.HasValue)
-				return node.LaageInParent;
+				return node.PositionInParent;
 
-			return node.LaageInParent + VonParentErbeLaage;
+			return node.PositionInParent + VonParentErbeLaage;
 		}
 
 		static public string LabelText(
@@ -94,7 +97,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			this UINodeInfoInTree node,
 			ref int inBaumAstIndexZääler,
 			int? tiifeMax = null,
-			Vektor2DSingle? vonParentErbeLaage = null,
+			Vector2DSingle? vonParentErbeLaage = null,
 			float? vonParentErbeClippingFläceLinx = null,
 			float? vonParentErbeClippingFläceOobn = null,
 			float? vonParentErbeClippingFläceRecz = null,
@@ -109,7 +112,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			node.InTreeIndex = ++inBaumAstIndexZääler;
 			node.FromParentLocation = vonParentErbeLaage;
 
-			var FürChildVonParentErbeLaage = node.LaageInParent;
+			var FürChildVonParentErbeLaage = node.PositionInParent;
 
 			var LaagePlusVonParentErbeLaage = node.LaagePlusVonParentErbeLaage();
 			var Grööse = node.Grööse;
@@ -195,12 +198,12 @@ namespace Optimat.EveOnline.AuswertGbs
 
 		static public T LargestNodeInSubtree<T>(
 			this IEnumerable<T> source)
-			where T : GbsAstInfo =>
-			source?.OrderByDescending(element => (element.GrööseA * element.GrööseB) ?? int.MinValue)?.FirstOrDefault();
+			where T : GbsNodeInfo =>
+			source?.OrderByDescending(element => (element.SizeA * element.SizeB) ?? int.MinValue)?.FirstOrDefault();
 
 		static public T GröösteSpriteAst<T>(
 			this IEnumerable<T> source)
-			where T : GbsAstInfo =>
+			where T : GbsNodeInfo =>
 			source?.Where(k => k.PyObjTypNameIsSprite())
 			?.LargestNodeInSubtree();
 
@@ -281,7 +284,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				omitNodesBelowNodesMatchingPredicate);
 		}
 
-		static public Vektor2DSingle? GrööseMaxAusListeChild(
+		static public Vector2DSingle? GrööseMaxAusListeChild(
 			this UINodeInfoInTree Ast)
 		{
 			if (null == Ast)
@@ -289,7 +292,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				return null;
 			}
 
-			Vektor2DSingle? GrööseMax = null;
+			Vector2DSingle? GrööseMax = null;
 
 			var ThisGrööse = Ast.Grööse;
 
@@ -310,7 +313,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					{
 						if (GrööseMax.HasValue)
 						{
-							GrööseMax = new Vektor2DSingle(
+							GrööseMax = new Vector2DSingle(
 								Math.Max(GrööseMax.Value.A, ChildGrööse.Value.A),
 								Math.Max(GrööseMax.Value.B, ChildGrööse.Value.B));
 						}
@@ -327,7 +330,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 		static string[] UIRootVorgaabeGrööseListeName = new string[] { "l_main", "l_viewstate" };
 
-		static public Vektor2DSingle? GrööseAusListeChildFürScpezUIRootBerecne(
+		static public Vector2DSingle? GrööseAusListeChildFürScpezUIRootBerecne(
 			this UINodeInfoInTree Ast)
 		{
 			if (null == Ast)
@@ -545,14 +548,14 @@ namespace Optimat.EveOnline.AuswertGbs
 			this IEnumerable<T> MengeKandidaat,
 			IEnumerable<AstT> MengeContainerZuMaide)
 			where T : IObjectIdInMemory
-			where AstT : GbsAstInfo =>
+			where AstT : GbsNodeInfo =>
 			MengeKandidaat?.Where(Kandidaat => !(MengeContainerZuMaide?.Any(ContainerZuMaide =>
-			new AstT[] { ContainerZuMaide }.ConcatNullable(ContainerZuMaide.MengeChildAstTransitiiveHüle()).Any(ContainerZuMaideChild => ContainerZuMaideChild.PyObjAddress == Kandidaat.Id)) ?? false));
+			new AstT[] { ContainerZuMaide }.ConcatNullable(ContainerZuMaide.EnumerateChildNodeTransitiveHüle()).Any(ContainerZuMaideChild => ContainerZuMaideChild.PyObjAddress == Kandidaat.Id)) ?? false));
 
 		static public ColorORGB AlsColorORGB(this ColorORGBVal? Color) =>
 			Color.HasValue ? new ColorORGB(Color) : null;
 
 		static public IEnumerable<NodeT> OrderByRegionSizeDescending<NodeT>(this IEnumerable<NodeT> seq)
-			where NodeT : GbsAstInfo => seq?.OrderByDescending(node => node?.Grööse?.Betraag ?? -1);
+			where NodeT : GbsNodeInfo => seq?.OrderByDescending(node => node?.Grööse?.Betraag ?? -1);
 	}
 }

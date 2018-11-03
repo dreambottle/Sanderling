@@ -82,11 +82,11 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var KandidaatUtilmenuEkeLinksUnteLaage =
 				KandidaatUtilmenuLaagePlusVonParentErbeLaageNulbar.Value +
-				new Vektor2DSingle(0, KandidaatUtilmenuGrööseNulbar.Value.B);
+				new Vector2DSingle(0, KandidaatUtilmenuGrööseNulbar.Value.B);
 
 			var VonUtilmenuNaacExpandedUtilmenuSctreke =
 				ExpandedUtilMenuAstLaagePlusVonParentErbeLaage.Value +
-				new Vektor2DSingle(0, 1) -
+				new Vector2DSingle(0, 1) -
 				KandidaatUtilmenuEkeLinksUnteLaage;
 
 			if (4 < VonUtilmenuNaacExpandedUtilmenuSctreke.Betraag)

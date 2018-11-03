@@ -70,7 +70,7 @@ namespace Sanderling.Exe
 
 			BotAPIExplorer?.Present(UIAPI);
 
-			InterfaceToEveControl?.Present(SensorServerDispatcher, MemoryMeasurementLast?.MapValue(evaluation => evaluation?.MemoryMeasurement));
+			InterfaceToEveControl?.Present(MemoryMeasurementLast?.MapValue(evaluation => evaluation?.MemoryMeasurement));
 
 			MainControl?.InterfaceHeader?.SetStatus(InterfaceToEveControl.InterfaceStatusEnum());
 		}

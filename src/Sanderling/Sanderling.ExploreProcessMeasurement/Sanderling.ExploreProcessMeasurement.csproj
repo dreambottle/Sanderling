@@ -184,10 +184,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sanderling.Interface\Sanderling.Interface.csproj">
-      <Project>{41ece926-3577-4774-8902-e7ba721dcc09}</Project>
-      <Name>Sanderling.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sanderling.MemoryReading\Sanderling.MemoryReading.csproj">
       <Project>{2a04e046-2908-400a-9efa-a49884b5d691}</Project>
       <Name>Sanderling.MemoryReading</Name>

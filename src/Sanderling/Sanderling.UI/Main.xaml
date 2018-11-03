@@ -21,7 +21,8 @@
                 <Style TargetType="TabItem" BasedOn="{StaticResource ContentControlHeaderWithStatusIcon}">
                 </Style>
             </TabControl.Resources>
-            <TabItem>
+            <TabItem
+                IsSelected="True">
                 <TabItem.Header>
                     <BotEngine.UI.ViewModel:ContentAndStatusIcon
                         x:Name="InterfaceHeader"
@@ -35,8 +36,7 @@
                 </local:InterfaceToEve>
             </TabItem>
 
-            <TabItem
-                IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <BotEngine.UI.ViewModel:ContentAndStatusIcon
                         x:Name="BotHeader"

@@ -10,7 +10,7 @@ namespace Optimat.EveOnline
 
 		readonly public List<SictAuswertPyObj32GbsAstZuusctand> ListeChild = new List<SictAuswertPyObj32GbsAstZuusctand>();
 
-		readonly public GbsAstInfo AstInfo = new GbsAstInfo();
+		readonly public GbsNodeInfo AstInfo = new GbsNodeInfo();
 
 		[SictInPyDictEntryKeyAttribut(Optimat.EveOnline.SictProzesAuswertZuusctand.GbsAstSclüselParentRefString)]
 		public SictAuswertPyObj32Zuusctand DictEntryParentRef;

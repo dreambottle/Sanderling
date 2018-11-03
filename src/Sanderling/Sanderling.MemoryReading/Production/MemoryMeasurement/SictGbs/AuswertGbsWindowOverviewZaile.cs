@@ -133,8 +133,8 @@ namespace Optimat.EveOnline.AuswertGbs
 
 						return string.Equals("OverviewLabel", KandidaatPyObjTypName, StringComparison.InvariantCultureIgnoreCase);
 					})
-				.Where((Kandidaat) => Kandidaat.LaageInParent.HasValue)
-				.OrderBy((Kandidaat) => Kandidaat.LaageInParent.Value.A)
+				.Where((Kandidaat) => Kandidaat.PositionInParent.HasValue)
+				.OrderBy((Kandidaat) => Kandidaat.PositionInParent.Value.A)
 				.ToArray();
 
 			/*

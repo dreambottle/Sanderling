@@ -13,7 +13,7 @@ namespace Optimat.EveOnline
 			IMemoryReader ausProzesLeeser,
 			SictProzesAuswertZuusctand prozesAuswertZuusctand,
 			SictAuswertPyObj32GbsAstZuusctand gbsAst,
-			GbsAstInfo ziilAstInfo)
+			GbsNodeInfo ziilAstInfo)
 		{
 			if (null == ziilAstInfo)
 				return;

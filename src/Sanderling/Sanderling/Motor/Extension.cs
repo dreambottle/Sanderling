@@ -35,7 +35,7 @@ namespace Sanderling.Motor
 
 			var SetElementExcludedFromOcclusion = memoryMeasurement?.EnumerateSetElementExcludedFromOcclusion()?.ToArray();
 
-			var Random = new Random((int)Bib3.Glob.StopwatchZaitMiliSictInt());
+			var Random = new Random((int)Environment.TickCount);
 
 			var MouseListWaypoint = motion?.MouseListWaypoint;
 

@@ -25,7 +25,7 @@ namespace Sanderling
 		{
 			public MemoryMeasurementInitReport DerivedFrom;
 
-			public FromProcessMeasurement<GbsAstInfo> Raw;
+			public FromProcessMeasurement<GbsNodeInfo> Raw;
 
 			public FromProcessMeasurement<IMemoryMeasurement> ViewInterface;
 		}
@@ -87,7 +87,7 @@ namespace Sanderling
 
 			lock (MeasurementLock)
 			{
-				var StartTimeMilli = Bib3.Glob.StopwatchZaitMiliSictInt();
+				var StartTimeMilli = Environment.TickCount;
 
 				var Measurement = new MemoryMeasurementInitReport
 				{
@@ -96,19 +96,20 @@ namespace Sanderling
 
 				var ProcessId = param.ProcessId;
 
-				var SuuceWurzel = new SictProcessMitIdAuswertWurzelSuuce(ProcessId);
+				var SearchRoot = new SictProcessMitIdAuswertWurzelSuuce(ProcessId);
 
-				SuuceWurzel.Berecne();
+				SearchRoot.Read();
 
-				Measurement.ForDerived = SuuceWurzel;
+				Measurement.ForDerived = SearchRoot;
 
 				Measurement.SetRootAdr =
-					SuuceWurzel?.GbsMengeWurzelObj
-					?.Select(wurzelObj => wurzelObj?.HerkunftAdrese)
-					?.WhereNotNullSelectValue()
-					?.ToArray();
+					SearchRoot?.GbsMengeWurzelObj
+					    ?.Select(rootObj => rootObj?.HerkunftAdrese)
+                        //?.WhereNotNullSelectValue()
+                        ?.Where(x => (x.HasValue))?.Select(x => x.Value)
+                        ?.ToArray();
 
-				var EndTimeMilli = Bib3.Glob.StopwatchZaitMiliSictInt();
+				var EndTimeMilli = Environment.TickCount;
 
 				var ProcessMeasurementReport = new FromProcessMeasurement<MemoryMeasurementInitReport>(
 					Measurement,
@@ -126,7 +127,7 @@ namespace Sanderling
 		{
 			lock (MeasurementLock)
 			{
-				var StartTimeMilli = Bib3.Glob.StopwatchZaitMiliSictInt();
+				var StartTimeMilli = Environment.TickCount;
 
 				var MeasurementInit = MemoryMeasurementInitLastReport;
 
@@ -156,17 +157,17 @@ namespace Sanderling
 					var GbsBaumDirekt = ScnapscusAuswert.GbsWurzelHauptInfo;
 
 					Measurement.Raw =
-						new FromProcessMeasurement<GbsAstInfo>(GbsBaumDirekt, StartTimeMilli, Bib3.Glob.StopwatchZaitMiliSictInt(), ProcessId);
+						new FromProcessMeasurement<GbsNodeInfo>(GbsBaumDirekt, StartTimeMilli, Environment.TickCount, ProcessId);
 
 					var GbsBaumAuswert =
 						Optimat.EveOnline.AuswertGbs.Extension.SensorikScnapscusKonstrukt(
-							ScnapscusAuswert.GbsWurzelHauptInfo, (int?)(1e+9));
+							ScnapscusAuswert.GbsWurzelHauptInfo, int.MaxValue);
 
 					Measurement.ViewInterface =
-						new FromProcessMeasurement<IMemoryMeasurement>(GbsBaumAuswert, StartTimeMilli, Bib3.Glob.StopwatchZaitMiliSictInt(), ProcessId);
+						new FromProcessMeasurement<IMemoryMeasurement>(GbsBaumAuswert, StartTimeMilli, Environment.TickCount, ProcessId);
 				});
 
-				var EndTimeMilli = Bib3.Glob.StopwatchZaitMiliSictInt();
+				var EndTimeMilli = Environment.TickCount;
 
 				var ProcessMeasurementReport = new FromProcessMeasurement<MemoryMeasurementReport>(
 					Measurement,

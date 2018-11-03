@@ -230,7 +230,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var aboveServicesLabel =
 				base.Ergeebnis?.LabelText
-				?.Where(k => k.Region.Center().B < undockButtonNode?.LaagePlusVonParentErbeLaageB() + undockButtonNode?.GrööseB)
+				?.Where(k => k.Region.Center().B < undockButtonNode?.LaagePlusVonParentErbeLaageB() + undockButtonNode?.SizeB)
 				?.ToArray();
 
 			var Ergeebnis = new WindowStation(base.Ergeebnis)

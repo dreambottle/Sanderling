@@ -129,17 +129,11 @@
     <Compile Include="Production\MemoryMeasurement\SictGbs\Neocom.cs" />
     <Compile Include="Production\MemoryMeasurement\SictGbs\SquadronUI.cs" />
     <Compile Include="Production\MemoryMeasurement\SictGbs\VonKlientBerictProzesZuusctandAuswert.cs" />
-    <Compile Include="Production\SictVektor2DSingle.cs" />
+    <Compile Include="Production\Vector2DSingle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sanderling.Interface\Sanderling.Interface.csproj">
-      <Project>{41ece926-3577-4774-8902-e7ba721dcc09}</Project>
-      <Name>Sanderling.Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

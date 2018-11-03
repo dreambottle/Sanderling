@@ -6,29 +6,31 @@ using System.Linq;
 
 namespace Sanderling.MemoryReading.Production
 {
-	static public class Extension
-	{
-		static readonly Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer
-			KonvertGbsAstInfoRictliinieMitScatescpaicer =
-			new Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer(
-				Bib3.RefNezDiferenz.NewtonsoftJson.SictMengeTypeBehandlungRictliinieNewtonsoftJson.KonstruktMengeTypeBehandlungRictliinie(
-				new KeyValuePair<Type, Type>[]{
-					new KeyValuePair<Type, Type>(typeof(GbsAstInfo), typeof(UINodeInfoInTree)),
-					new KeyValuePair<Type, Type>(typeof(GbsAstInfo[]), typeof(UINodeInfoInTree[])),
-		}));
+    static public class Extension
+    {
+        //// view type treatment/processing guideline/directive  ... shadow? storey?
+        //static readonly Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer
+        //    KonvertGbsAstInfoRictliinieMitScatescpaicer =
+        //    new Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer(
+        //        Bib3.RefNezDiferenz.NewtonsoftJson.SictMengeTypeBehandlungRictliinieNewtonsoftJson.KonstruktMengeTypeBehandlungRictliinie(
+        //        new KeyValuePair<Type, Type>[]{
+        //            new KeyValuePair<Type, Type>(typeof(GbsNodeInfo), typeof(UINodeInfoInTree)),
+        //            new KeyValuePair<Type, Type>(typeof(GbsNodeInfo[]), typeof(UINodeInfoInTree[])),
+        //}));
+        
+        static public IEnumerable<T[]> EnumerateNodePathsInTree<T>(
+            this T searchRoot)
+            where T : GbsNodeInfo =>
 
-		static public IEnumerable<T[]> SuuceFlacMengeAstMitPfaad<T>(
-			this T SuuceWurzel)
-			where T : GbsAstInfo =>
-			Bib3.Extension.EnumeratePathToNodeFromTree(SuuceWurzel, Ast => Ast.GetListChild()?.OfType<T>());
+            Bib3.Extension.EnumeratePathToNodeFromTree(searchRoot, node => node.GetChildList()?.OfType<T>());
+        
+        static public T[] FindFirstInTreeWhere<T>(
+            this T searchRoot,
+            Func<T, bool> predicate)
+            where T : GbsNodeInfo =>
+            EnumerateNodePathsInTree(searchRoot)
+            ?.Where(path => predicate(path?.LastOrDefault()))
+            ?.FirstOrDefault();
 
-		static public T[] SuuceFlacMengeAstMitPfaadFrüheste<T>(
-			this T SuuceWurzel,
-			Func<T, bool> Prädikaat)
-			where T : GbsAstInfo =>
-			SuuceFlacMengeAstMitPfaad(SuuceWurzel)
-			?.Where(pfaad => Prädikaat(pfaad?.LastOrDefault()))
-			?.FirstOrDefault();
-
-	}
+    }
 }

@@ -5,31 +5,32 @@ using Sanderling.MemoryReading.Production;
 
 namespace Optimat.EveOnline
 {
-	public class InGbsPfaad
+	public class InGbsPath
 	{
-		public Int64? WurzelAstAdrese;
+		public Int64? rootNodeAddress;
 
-		public Int64[] ListeAstAdrese;
+		public Int64[] nodeAddressList;
 
-		public InGbsPfaad()
+		public InGbsPath()
 		{
 		}
 
-		public InGbsPfaad(
-			Int64? wurzelAstAdrese,
-			Int64[] listeAstAdrese = null)
+		public InGbsPath(
+			Int64? rootNodeAddress,
+			Int64[] nodeAddressList = null)
 		{
-			this.WurzelAstAdrese = wurzelAstAdrese;
-			this.ListeAstAdrese = listeAstAdrese;
+			this.rootNodeAddress = rootNodeAddress;
+			this.nodeAddressList = nodeAddressList;
 		}
 	}
 
-	public class GbsAstInfo
+	public class GbsNodeInfo
 	{
-		/// <summary>
-		/// Adrese von welcer der Ast aus Ziil Proces geleese wurde.
-		/// </summary>
-		public Int64? PyObjAddress;
+        /// <summary>
+        /// Address from which the branch was read from target process.
+        /// Adrese von welcer der Ast aus Ziil Proces geleese wurde.
+        /// </summary>
+        public Int64? PyObjAddress;
 
 		public string PyObjTypName;
 
@@ -45,13 +46,13 @@ namespace Optimat.EveOnline
 
 		public string Hint;
 
-		public float? LaageInParentA;
+		public float? PositionInParentA;
 
-		public float? LaageInParentB;
+		public float? PositionInParentB;
 
-		public float? GrööseA;
+		public float? SizeA;
 
-		public float? GrööseB;
+		public float? SizeB;
 
 		public string Caption;
 
@@ -104,9 +105,9 @@ namespace Optimat.EveOnline
 
 		public float? StructureLevel;
 
-		public GbsAstInfo[] ListChild;
+		public GbsNodeInfo[] ListChild;
 
-		public GbsAstInfo[] BackgroundList;
+		public GbsNodeInfo[] BackgroundList;
 
 		public string[] DictListKeyStringValueNotEmpty;
 
@@ -120,89 +121,89 @@ namespace Optimat.EveOnline
 		{
 			set
 			{
-				ZuuwaisungNaacKomponente(Color, ref ColorAMili, ref ColorRMili, ref ColorGMili, ref ColorBMili);
+				assignToComponents(Color, ref ColorAMili, ref ColorRMili, ref ColorGMili, ref ColorBMili);
 			}
 
 			get
 			{
-				return KomponenteZuColorARGBVal(ColorAMili, ColorRMili, ColorGMili, ColorBMili);
+				return createColorArgbFromComponents(ColorAMili, ColorRMili, ColorGMili, ColorBMili);
 			}
 		}
 
-		public Vektor2DSingle? LaageInParent
+		public Vector2DSingle? PositionInParent
 		{
 			set
 			{
-				ZuuwaisungNaacKomponente(value, ref LaageInParentA, ref LaageInParentB);
+				assignToComponents(value, ref PositionInParentA, ref PositionInParentB);
 			}
 
 			get
 			{
-				return KomponenteZuVektorSingle(LaageInParentA, LaageInParentB);
+				return ComponentToVector2D(PositionInParentA, PositionInParentB);
 			}
 		}
 
-		public Vektor2DSingle? Grööse
+		public Vector2DSingle? Grööse
 		{
 			set
 			{
-				ZuuwaisungNaacKomponente(value, ref GrööseA, ref GrööseB);
+				assignToComponents(value, ref SizeA, ref SizeB);
 			}
 
 			get
 			{
-				return KomponenteZuVektorSingle(GrööseA, GrööseB);
+				return ComponentToVector2D(SizeA, SizeB);
 			}
 		}
 
-		public GbsAstInfo()
+		public GbsNodeInfo()
 		{
 		}
 
-		public GbsAstInfo(
+		public GbsNodeInfo(
 			Int64? inProzesHerkunftAdrese)
 		{
 			this.PyObjAddress = inProzesHerkunftAdrese;
 		}
 
-		virtual public IEnumerable<GbsAstInfo> GetListChild()
+		virtual public IEnumerable<GbsNodeInfo> GetChildList()
 		{
 			return ListChild;
 		}
 
-		static public void ZuuwaisungNaacKomponente(
-			Vektor2DSingle? vektor,
-			ref float? komponenteA,
-			ref float? komponenteB)
+		static public void assignToComponents(
+			Vector2DSingle? vector,
+			ref float? componentA,
+			ref float? componentB)
 		{
-			komponenteA = vektor?.A;
-			komponenteB = vektor?.B;
+			componentA = vector?.A;
+			componentB = vector?.B;
 		}
 
-		static public Vektor2DSingle? KomponenteZuVektorSingle(
+		static public Vector2DSingle? ComponentToVector2D(
 			float? a,
 			float? b)
 		{
 			if (!a.HasValue || !b.HasValue)
 				return null;
 
-			return new Vektor2DSingle(a.Value, b.Value);
+			return new Vector2DSingle(a.Value, b.Value);
 		}
 
-		static public void ZuuwaisungNaacKomponente(
-			ColorORGBVal? farbe,
-			ref int? komponenteAMili,
-			ref int? komponenteRMili,
-			ref int? komponenteGMili,
-			ref int? komponenteBMili)
+		static public void assignToComponents(
+			ColorORGBVal? color,
+			ref int? componentAMili,
+			ref int? componentRMili,
+			ref int? componentGMili,
+			ref int? componentBMili)
 		{
-			komponenteAMili = farbe?.OMilli;
-			komponenteRMili = farbe?.RMilli;
-			komponenteGMili = farbe?.GMilli;
-			komponenteBMili = farbe?.BMilli;
+			componentAMili = color?.OMilli;
+			componentRMili = color?.RMilli;
+			componentGMili = color?.GMilli;
+			componentBMili = color?.BMilli;
 		}
 
-		static public ColorORGBVal? KomponenteZuColorARGBVal(
+		static public ColorORGBVal? createColorArgbFromComponents(
 			int? aMilli,
 			int? rMilli,
 			int? gMilli,
@@ -211,41 +212,41 @@ namespace Optimat.EveOnline
 			return new ColorORGBVal(aMilli, rMilli, gMilli, bMilli);
 		}
 
-		public IEnumerable<GbsAstInfo> MengeChildAstTransitiiveHüle(
-			int? tiifeScrankeMax = null)
+		public IEnumerable<GbsNodeInfo> EnumerateChildNodeTransitiveHüle(
+			int? depthMaxLimit = null)
 		{
-			var ListeChild = this.GetListChild();
+			var childList = this.GetChildList();
 
-			if (tiifeScrankeMax <= 0)
+			if (depthMaxLimit <= 0)
 				return null;
 
-			if (null == ListeChild)
+			if (null == childList)
 				return null;
 
-			var listeChildMengeChildAstTransitiiv = new List<GbsAstInfo>();
+			var childListTransitive = new List<GbsNodeInfo>();
 
-			foreach (var Child in ListeChild)
+			foreach (var child in childList)
 			{
-				if (null == Child)
+				if (null == child)
 					continue;
 
-				listeChildMengeChildAstTransitiiv.Add(Child);
+				childListTransitive.Add(child);
 
-				var ChildMengeChild = Child.MengeChildAstTransitiiveHüle(tiifeScrankeMax - 1);
-
-				if (null != ChildMengeChild)
-					listeChildMengeChildAstTransitiiv.AddRange(ChildMengeChild);
+				var childrenOfTheChild = child.EnumerateChildNodeTransitiveHüle(depthMaxLimit - 1);
+                
+				if (null != childrenOfTheChild)
+					childListTransitive.AddRange(childrenOfTheChild);
 			}
 
-			return listeChildMengeChildAstTransitiiv;
+			return childListTransitive;
 		}
 
-		public Int64[] MengeSelbsctUndChildAstHerkunftAdreseTransitiiveHüleBerecne(
-			int? tiifeScrankeMax = null)
+		public Int64[] EnumerateSelfAndChildNodeHerkunftAdreseTransitiiveHüleBerecne(
+			int? depthMaxLimit = null)
 		{
 			var MengeAdrese = new List<Int64>();
 
-			MengeSelbsctUndChildAstHerkunftAdreseTransitiiveHüleFüügeAinNaacListe(MengeAdrese, tiifeScrankeMax);
+			MengeSelbsctUndChildAstHerkunftAdreseTransitiiveHüleFüügeAinNaacListe(MengeAdrese, depthMaxLimit);
 
 			return MengeAdrese.ToArray();
 		}
@@ -262,7 +263,7 @@ namespace Optimat.EveOnline
 			if (herkunftAdrese.HasValue)
 				ziilListe.Add(herkunftAdrese.Value);
 
-			var listeChild = this.GetListChild();
+			var listeChild = this.GetChildList();
 
 			if (tiifeScrankeMax <= 0)
 				return;

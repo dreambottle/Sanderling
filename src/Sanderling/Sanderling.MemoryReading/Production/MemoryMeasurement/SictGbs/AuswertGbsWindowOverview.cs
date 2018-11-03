@@ -103,7 +103,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					continue;
 				}
 
-				var LabelAstLaage = LabelAst.LaageInParent;
+				var LabelAstLaage = LabelAst.PositionInParent;
 				var LabelAstGrööse = LabelAst.Grööse;
 
 				if (!LabelAstLaage.HasValue)
@@ -163,7 +163,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			foreach (var KandidaatSortHeaderAst in MengeKandidaatSortHeaderAst)
 			{
-				var KandidaatSortHeaderAstLaage = KandidaatSortHeaderAst.LaageInParent;
+				var KandidaatSortHeaderAstLaage = KandidaatSortHeaderAst.PositionInParent;
 				var KandidaatSortHeaderAstGrööse = KandidaatSortHeaderAst.Grööse;
 
 				if (!KandidaatSortHeaderAstLaage.HasValue ||

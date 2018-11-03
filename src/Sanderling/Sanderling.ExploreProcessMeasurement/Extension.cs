@@ -16,7 +16,7 @@ namespace Sanderling.ExploreProcessMeasurement
 			return Optimat.EveOnline.AuswertGbs.Extension.SensorikScnapscusKonstrukt(GbsWurzelHaupt, null);
 		}
 
-		static public Optimat.EveOnline.GbsAstInfo GbsWurzelHaupt(
+		static public Optimat.EveOnline.GbsNodeInfo GbsWurzelHaupt(
 			this BotEngine.Interface.IMemoryReader MemoryReader)
 		{
 			if (null == MemoryReader)
@@ -26,7 +26,7 @@ namespace Sanderling.ExploreProcessMeasurement
 
 			var WurzelSuuce = new Optimat.EveOnline.MemoryAuswertWurzelSuuce(MemoryReader);
 
-			WurzelSuuce.Berecne();
+			WurzelSuuce.Read();
 
 			var MemoryMeasurementTask = new Optimat.EveOnline.SictProzesAuswertZuusctandScpezGbsBaum(
 				MemoryReader,

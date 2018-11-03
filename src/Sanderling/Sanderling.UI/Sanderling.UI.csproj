@@ -138,10 +138,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sanderling.Interface\Sanderling.Interface.csproj">
-      <Project>{41ece926-3577-4774-8902-e7ba721dcc09}</Project>
-      <Name>Sanderling.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sanderling\Sanderling.csproj">
       <Project>{36f1710c-532f-47fd-88e2-5fafb381121c}</Project>
       <Name>Sanderling</Name>

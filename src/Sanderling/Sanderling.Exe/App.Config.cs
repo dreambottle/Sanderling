@@ -9,11 +9,6 @@ namespace Sanderling.Exe
 {
 	partial class App
 	{
-		string LicenseKeyStoreFilePath => AssemblyDirectoryPath.PathToFilesysChild(@"license.key");
-
-		static public string ConfigFilePath =>
-			AssemblyDirectoryPath.PathToFilesysChild("config");
-
 		string ScriptDirectoryPath => AssemblyDirectoryPath.PathToFilesysChild(@"script\");
 
 		string DefaultScriptPath => ScriptDirectoryPath.PathToFilesysChild("default.cs");
@@ -65,11 +60,5 @@ namespace Sanderling.Exe
 				OfferedDemoBots = IncludedDemoBots,
 			};
 		}
-
-		static public ExeConfig ConfigDefaultConstruct() =>
-			new ExeConfig
-			{
-				LicenseClient = ExeConfig.LicenseClientDefault,
-			};
 	}
 }

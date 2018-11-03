@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
 using Sanderling.Interface.MemoryStruct;
+using Commons.Geometry;
 
 namespace Sanderling.Accumulation
 {
@@ -11,6 +12,10 @@ namespace Sanderling.Accumulation
 	{
 		static public bool IsActive(this IShipUiModule moduleAccu) =>
 			moduleAccu?.LastInstant?.Value?.Module?.RampActive ?? false;
+
+		static public Vector2i? PositionInShipUiVec2i(
+			this MemoryStruct.IShipUiModule module, MemoryStruct.IShipUi shipUi) =>
+			module?.RegionCenter() - shipUi?.Center?.RegionCenter();
 
 		static public Vektor2DInt? PositionInShipUi(
 			this MemoryStruct.IShipUiModule module, MemoryStruct.IShipUi shipUi) =>

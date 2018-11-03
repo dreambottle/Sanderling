@@ -262,9 +262,12 @@ namespace Sanderling.Parse
 				if (null == func)
 					return default(T);
 
+#pragma warning disable CC0031 // Check for null before calling a delegate
+				// not sure why VS warns about this
 				return func();
+#pragma warning restore CC0031 // Check for null before calling a delegate
 			}
-			catch
+			catch (Exception)
 			{
 				return default(T);
 			}
@@ -298,7 +301,7 @@ namespace Sanderling.Parse
 
 				Mission =
 					null == Objective ? null :
-					new DialogueMission()
+					new DialogueMission
 					{
 						Title = LeftPane?.Caption,
 						Objective = Objective,
@@ -315,11 +318,13 @@ namespace Sanderling.Parse
 				QuitButton = ButtonContainingTextIgnoringCase("Quit");
 				DelayButton = ButtonContainingTextIgnoringCase("Delay");
 			}
+#pragma warning disable CC0004 // Catch block cannot be empty
 			catch
 			{
 			}
+#pragma warning restore CC0004 // Catch block cannot be empty
 
-			return new WindowAgentDialogue()
+			return new WindowAgentDialogue
 			{
 				Raw = window,
 				LeftPane = LeftPane,
@@ -365,7 +370,7 @@ namespace Sanderling.Parse
 
 			var Objective =
 				null == ObjectiveContainerNode ? null :
-				new DialogueMissionObjective()
+				new DialogueMissionObjective
 				{
 					Html = ObjectiveContainerNode?.OuterHtml,
 					SetComponent = SetObjectiveAtom,
@@ -387,13 +392,13 @@ namespace Sanderling.Parse
 			IDialogueMissionReward Reward = null;
 
 			if (null != RewardBase || null != RewardBonus)
-				Reward = new DialogueMissionReward()
+				Reward = new DialogueMissionReward
 				{
 					Base = RewardBase,
 					Bonus = RewardBonus,
 				};
 
-			return new WindowAgentPane()
+			return new WindowAgentPane
 			{
 				Raw = pane,
 				Caption = Caption,
@@ -438,7 +443,7 @@ namespace Sanderling.Parse
 				SetComponentTypeAndAmount[RewardType.Value] = Amount.Value;
 			}
 
-			return new DialogueMissionRewardAtom()
+			return new DialogueMissionRewardAtom
 			{
 				Html = htmlNode?.OuterHtml,
 				ISK = SetComponentTypeAndAmount?.TryGetValueNullable(RewardTypeEnum.ISK),
@@ -482,7 +487,7 @@ namespace Sanderling.Parse
 					.Contains(TypeEnum))
 					Item = ObjectiveItemFromDialogueText(LastCell?.InnerText);
 
-				return new DialogueMissionObjective()
+				return new DialogueMissionObjective
 				{
 					Html = htmlNode?.OuterHtml,
 					TypeEnum = TypeEnum,
@@ -491,7 +496,7 @@ namespace Sanderling.Parse
 					CompleteSelf = CompleteSelf,
 				};
 			}
-			catch
+			catch (Exception)
 			{
 				return null;
 			}
@@ -522,7 +527,7 @@ namespace Sanderling.Parse
 
 			var Name = NameNode?.InnerText?.Trim();
 
-			return new DialogueMissionLocation()
+			return new DialogueMissionLocation
 			{
 				Name = Name,
 				SecurityLevelMilli = (int?)SecurityLevelMilli,
@@ -541,7 +546,7 @@ namespace Sanderling.Parse
 
 			var VolumeValueMilli = (int?)Number.NumberParseDecimalMilli(VolumeValueMatch?.Value);
 
-			return new DialogueMissionObjectiveItem()
+			return new DialogueMissionObjectiveItem
 			{
 				Quantity = Match.Groups["quant"].Value.TryParseInt(),
 				Name = Match.Groups["name"].Value?.Trim(),
@@ -597,7 +602,7 @@ namespace Sanderling.Parse
 			var listComponentMatch =
 				Regex.Matches(durationText, DurationTextComponentRegexPattern);
 
-			int sum = 0;
+			var sum = 0;
 
 			foreach (var componentMatch in (listComponentMatch?.Cast<Match>()).EmptyIfNull())
 			{

@@ -5,12 +5,12 @@ namespace Commons.Geometry
 	public struct Vector2i
 	{
 		// Fields
-		public int X;
+		public long X;
 
-		public int Y;
+		public long Y;
 
 		// Indexer
-		public int this[int index]
+		public long this[int index]
 		{
 			get
 			{
@@ -41,22 +41,22 @@ namespace Commons.Geometry
 		}
 
 		// Constructors
-		public Vector2i(int xy)
+		public Vector2i(long xy)
 		{
 			this.X = xy;
 			this.Y = xy;
 		}
 
-		public Vector2i(int x, int y)
+		public Vector2i(long x, long y)
 		{
 			this.X = x;
 			this.Y = y;
 		}
 
 		// Properties
-		public float sqrMagnitude => (float)X * X + (float)Y * Y;
+		public float SqrMagnitude => (float)X * X + (float)Y * Y;
 
-		public float magnitude => (float)Math.Sqrt(sqrMagnitude);
+		public float Magnitude => (float)Math.Sqrt(SqrMagnitude);
 
 		public bool IsWithinBounds(Vector2i from, Vector2i to)
 		{
@@ -78,12 +78,16 @@ namespace Commons.Geometry
 			Y *= scale.Y;
 		}
 
-		public static Vector2i Scale(Vector2i a, Vector2i b)
+		public void Scale(Vector2f scale)
 		{
-			return new Vector2i(
-				a.X * b.X,
-				a.Y * b.Y
-			);
+			X = (long)(X * scale.X);
+			Y = (long)(Y * scale.Y);
+		}
+
+		public void Scale(float xScale, float yScale)
+		{
+			X = (long)(X * xScale);
+			Y = (long)(Y * yScale);
 		}
 
 		// Rotations
@@ -119,7 +123,7 @@ namespace Commons.Geometry
 				throw new ArgumentNullException(nameof(body));
 			}
 
-			var iterator = Vector2i.zero;
+			var iterator = Vector2i.Zero;
 			for (iterator.X = from.X; iterator.X < to.X; iterator.X++)
 			{
 				for (iterator.Y = from.Y; iterator.Y < to.Y; iterator.Y++)
@@ -130,10 +134,7 @@ namespace Commons.Geometry
 		}
 
 		// ToString
-		public override string ToString()
-		{
-			return string.Format("({0}, {1})", X, Y);
-		}
+		public override string ToString() => $"{{{nameof(Vector2i)}}}({X}, {Y})";
 
 		// Operators
 		public static Vector2i operator +(Vector2i a, Vector2i b)
@@ -157,7 +158,7 @@ namespace Commons.Geometry
 			return a + (-b);
 		}
 
-		public static Vector2i operator *(int d, Vector2i a)
+		public static Vector2i operator *(long d, Vector2i a)
 		{
 			return new Vector2i(
 				d * a.X,
@@ -165,12 +166,12 @@ namespace Commons.Geometry
 			);
 		}
 
-		public static Vector2i operator *(Vector2i a, int d)
+		public static Vector2i operator *(Vector2i a, long d)
 		{
 			return d * a;
 		}
 
-		public static Vector2i operator /(Vector2i a, int d)
+		public static Vector2i operator /(Vector2i a, long d)
 		{
 			return new Vector2i(
 				a.X / d,
@@ -212,7 +213,7 @@ namespace Commons.Geometry
 
 		public static float Distance(Vector2i a, Vector2i b)
 		{
-			return (a - b).magnitude;
+			return (a - b).Magnitude;
 		}
 
 		public static Vector2i Min(Vector2i lhs, Vector2i rhs)
@@ -231,49 +232,49 @@ namespace Commons.Geometry
 			);
 		}
 
-		public static int Dot(Vector2i lhs, Vector2i rhs)
+		public static long Dot(Vector2i lhs, Vector2i rhs)
 		{
 			return lhs.X * rhs.X +
 				   lhs.Y * rhs.Y;
 		}
 
-		public static float Magnitude(Vector2i a)
+		public static float MagnitudeOf(Vector2i a)
 		{
-			return a.magnitude;
+			return a.Magnitude;
 		}
 
-		public static float SqrMagnitude(Vector2i a)
+		public static float SqrMagnitudeOf(Vector2i a)
 		{
-			return a.sqrMagnitude;
+			return a.SqrMagnitude;
 		}
 
 		// Default values
-		public static Vector2i down
+		public static Vector2i Down
 		{
 			get { return new Vector2i(0, -1); }
 		}
 
-		public static Vector2i up
+		public static Vector2i Up
 		{
 			get { return new Vector2i(0, +1); }
 		}
 
-		public static Vector2i left
+		public static Vector2i Left
 		{
 			get { return new Vector2i(-1, 0); }
 		}
 
-		public static Vector2i right
+		public static Vector2i Right
 		{
 			get { return new Vector2i(+1, 0); }
 		}
 
-		public static Vector2i one
+		public static Vector2i One
 		{
 			get { return new Vector2i(+1, +1); }
 		}
 
-		public static Vector2i zero
+		public static Vector2i Zero
 		{
 			get { return new Vector2i(0, 0); }
 		}

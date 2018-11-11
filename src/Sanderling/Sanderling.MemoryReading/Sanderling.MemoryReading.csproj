@@ -59,7 +59,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Production\Extension.cs" />
-    <Compile Include="Production\MemoryMeasurement\GbsAstInfo.cs" />
+    <Compile Include="Production\MemoryMeasurement\GbsNodeInfo.cs" />
     <Compile Include="Production\MemoryMeasurement\MemToUITree\_16_Erwaiterung_Manuel.cs" />
     <Compile Include="Production\MemoryMeasurement\ProzesAuswert.WurzelSuuce.cs" />
     <Compile Include="Production\MemoryMeasurement\ProzesAuswertZuusctand.cs" />
@@ -124,13 +124,16 @@
     <Compile Include="Production\MemoryMeasurement\SictGbs\Neocom.cs" />
     <Compile Include="Production\MemoryMeasurement\SictGbs\SquadronUI.cs" />
     <Compile Include="Production\MemoryMeasurement\SictGbs\VonKlientBerictProzesZuusctandAuswert.cs" />
-    <Compile Include="Production\Vector2DSingle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{701aaefd-064a-4fa0-90d8-6f2dd7d253d3}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sanderling.Interface\Sanderling.Interface.csproj">
       <Project>{a765bfb5-945c-4106-9576-30ec485c9c41}</Project>
       <Name>Sanderling.Interface</Name>

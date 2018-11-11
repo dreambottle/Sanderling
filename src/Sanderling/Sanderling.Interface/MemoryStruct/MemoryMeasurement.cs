@@ -1,4 +1,4 @@
-﻿using Bib3.Geometrik;
+﻿using Commons.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		string VersionString { get; }
 
-		Vektor2DInt ScreenSize { get; }
+		Vector2i ScreenSize { get; }
 
 		IMenu[] Menu { get; }
 
@@ -108,7 +108,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		public string VersionString { set; get; }
 
-		public Vektor2DInt ScreenSize { set; get; }
+		public Vector2i ScreenSize { set; get; }
 
 		public IMenu[] Menu { set; get; }
 

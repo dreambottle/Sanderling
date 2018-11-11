@@ -1,10 +1,10 @@
-﻿using BotEngine.Interface;
+﻿using Commons.Struct;
 
 namespace Sanderling.Interface.MemoryStruct
 {
 	public interface ISprite : IUIElement
 	{
-		ColorORGB Color { get; }
+		ArgbColor Color { get; }
 
 		string Name { get; }
 
@@ -17,7 +17,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 	public class Sprite : UIElement, ISprite
 	{
-		public ColorORGB Color { set; get; }
+		public ArgbColor Color { set; get; }
 
 		public string Name { set; get; }
 

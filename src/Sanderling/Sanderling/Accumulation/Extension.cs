@@ -1,5 +1,4 @@
-﻿using Bib3.Geometrik;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
@@ -17,7 +16,7 @@ namespace Sanderling.Accumulation
 			this MemoryStruct.IShipUiModule module, MemoryStruct.IShipUi shipUi) =>
 			module?.RegionCenter() - shipUi?.Center?.RegionCenter();
 
-		static public Vektor2DInt? PositionInShipUi(
+		static public Vector2i? PositionInShipUi(
 			this MemoryStruct.IShipUiModule module, MemoryStruct.IShipUi shipUi) =>
 			module?.RegionCenter() - shipUi?.Center?.RegionCenter();
 

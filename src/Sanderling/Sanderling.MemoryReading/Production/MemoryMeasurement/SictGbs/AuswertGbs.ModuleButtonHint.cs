@@ -114,7 +114,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var icon =
 				ModuleButtonHintAst.MatchingNodesFromSubtreeBreadthFirst(k => k.PyObjTypNameIsIcon())
-				?.Select(k => k.AlsSprite())
+				?.Select(k => k.AsSprite())
 				?.ToArray();
 
 			var mengePfaad =
@@ -126,12 +126,12 @@ namespace Optimat.EveOnline.AuswertGbs
 				?.ToArray();
 
 			var mengeIconSprite =
-				mengePfaadIcon?.Select(path => path?.LastOrDefault()?.AlsSprite())
+				mengePfaadIcon?.Select(path => path?.LastOrDefault()?.AsSprite())
 				?.ToArray();
 
 			var listLabelString =
 				ModuleButtonHintAst?.ExtraktMengeLabelString()
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArrayIfNotEmpty();
 
 			MengeCellAst =
@@ -139,9 +139,9 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			ListeZaileMengeCellAst = ListeZaileMengeCellAstBerecneAusMengeAus(MengeCellAst);
 
-			var containerBase = ModuleButtonHintAst.AlsContainer();
+			var containerBase = ModuleButtonHintAst.AsContainer();
 
-			var labelText = ModuleButtonHintAst.ExtraktMengeLabelString()?.OrdnungLabel()?.ToArray();
+			var labelText = ModuleButtonHintAst.ExtraktMengeLabelString()?.OrderByLabel()?.ToArray();
 
 			Ergeebnis = new Container(ModuleButtonHintAst.AsUIElementIfVisible())
 			{

@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using BotEngine;
-using Bib3.Geometrik;
 using Bib3;
+using Commons.Geometry;
 
 namespace Sanderling.Interface.MemoryStruct
 {
@@ -32,27 +32,27 @@ namespace Sanderling.Interface.MemoryStruct
 			where T : class =>
 			Bib3.RefBaumKopii.RefBaumKopiiStatic.ObjektKopiiErsctele(toBeCopied, new Bib3.RefBaumKopii.Param(null, FromInterfaceResponse.SerialisPolicyCache));
 
-		static public IUIElement WithRegion(this IUIElement @base, RectInt region) =>
-			null == @base ? null : new UIElement(@base) { Region = region };
+		static public IUIElement WithRegion(this IUIElement @base, RectInt? region) =>
+			null == @base ? null : new UIElement(@base) { Region = region ?? RectInt.Empty };
 
-		static public IUIElement WithRegionSizePivotAtCenter(this IUIElement @base, Vektor2DInt regionSize) =>
-			null == @base ? null : @base.WithRegion(@base.Region.WithSizePivotAtCenter(regionSize));
+		static public IUIElement WithRegionSizePivotAtCenter(this IUIElement @base, Vector2i regionSize) =>
+			@base?.WithRegion(@base.Region.WithSizePivotAtCenter(regionSize));
 
-		static public IUIElement WithRegionSizeBoundedMaxPivotAtCenter(this IUIElement @base, Vektor2DInt regionSizeMax) =>
-			null == @base ? null : @base.WithRegion(@base.Region.WithSizeBoundedMaxPivotAtCenter(regionSizeMax));
+		static public IUIElement WithRegionSizeBoundedMaxPivotAtCenter(this IUIElement @base, Vector2i regionSizeMax) =>
+			@base?.WithRegion(@base.Region.WithSizeLimitPivotAtCenter(regionSizeMax));
 
-		static public Vektor2DInt? RegionCenter(
+		static public Vector2i? RegionCenter(
 			this IUIElement uiElement) =>
 			(uiElement?.Region)?.Center();
 
-		static public Vektor2DInt? RegionSize(
+		static public Vector2i? RegionSize(
 			this IUIElement uiElement) =>
 			(uiElement?.Region)?.Size();
 
-		static public Vektor2DInt? RegionCornerLeftTop(
+		static public Vector2i? RegionCornerLeftTop(
 			this IUIElement uiElement) => uiElement?.Region.MinPoint();
 
-		static public Vektor2DInt? RegionCornerRightBottom(
+		static public Vector2i? RegionCornerRightBottom(
 			this IUIElement uiElement) => uiElement?.Region.MaxPoint();
 
 		static public IEnumerable<ITreeViewEntry> EnumerateChildNodeTransitive(
@@ -61,26 +61,26 @@ namespace Sanderling.Interface.MemoryStruct
 
 		static public IEnumerable<T> OrderByCenterDistanceToPoint<T>(
 			this IEnumerable<T> sequence,
-			Vektor2DInt point)
+			Vector2i point)
 			where T : IUIElement =>
-			sequence?.OrderBy(element => (point - element?.RegionCenter())?.LengthSquared() ?? Int64.MaxValue);
+			sequence?.OrderBy(element => (point - element?.RegionCenter())?.SqrMagnitude ?? Int64.MaxValue);
 
 		static public IEnumerable<T> OrderByCenterVerticalDown<T>(
 			this IEnumerable<T> source)
 			where T : IUIElement =>
-			source?.OrderBy(element => element?.RegionCenter()?.B ?? int.MaxValue);
+			source?.OrderBy(element => element?.RegionCenter()?.Y ?? int.MaxValue);
 
 		static public IEnumerable<T> OrderByNearestPointOnLine<T>(
 			this IEnumerable<T> sequence,
-			Vektor2DInt lineVector,
-			Func<T, Vektor2DInt?> getPointRepresentingElement)
+			Vector2i lineVector,
+			Func<T, Vector2i?> getPointRepresentingElement)
 		{
-			var LineVectorLength = lineVector.Length();
+			var LineVectorMagnitude = (long)lineVector.Magnitude;
 
-			if (null == getPointRepresentingElement || LineVectorLength < 1)
+			if (null == getPointRepresentingElement || LineVectorMagnitude < 1)
 				return sequence;
 
-			var LineVectorNormalizedMilli = (lineVector * 1000) / LineVectorLength;
+			var LineVectorNormalizedMilli = (lineVector * 1000) / LineVectorMagnitude;
 
 			return
 				sequence?.Select(element =>
@@ -91,10 +91,11 @@ namespace Sanderling.Interface.MemoryStruct
 
 					if (PointRepresentingElement.HasValue)
 					{
-						LocationOnLine = PointRepresentingElement.Value.A * LineVectorNormalizedMilli.A + PointRepresentingElement.Value.B * LineVectorNormalizedMilli.B;
+						LocationOnLine = PointRepresentingElement.Value.X * LineVectorNormalizedMilli.X
+							+ PointRepresentingElement.Value.Y * LineVectorNormalizedMilli.Y;
 					}
 
-					return new { Element = element, LocationOnLine = LocationOnLine };
+					return new { Element = element, LocationOnLine };
 				})
 				?.OrderBy(elementAndLocation => elementAndLocation.LocationOnLine)
 				?.Select(elementAndLocation => (T)elementAndLocation.Element);

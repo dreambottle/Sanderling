@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -112,7 +112,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					return new KeyValuePair<IUIElementText, RectInt>(MissionButton, MissionKnopfInGbsFläce);
 				})
 				.Where((kandidaat) => null != kandidaat.Value)
-				.OrderBy((kandidaat) => kandidaat.Value.Center().B)
+				.OrderBy((kandidaat) => kandidaat.Value.Center().Y)
 				.Select((kandidaat) => kandidaat.Key)
 				.ToArray();
 

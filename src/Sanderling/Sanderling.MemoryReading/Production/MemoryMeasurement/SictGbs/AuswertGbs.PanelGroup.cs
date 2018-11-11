@@ -59,7 +59,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					string.Equals(ContainerMengeEntryName, Kandidaat.Name, StringComparison.InvariantCultureIgnoreCase),
 				2, 1);
 
-			var Ergeebnis = new PanelGroup(PanelGroupAst.AlsContainer());
+			var Ergeebnis = new PanelGroup(PanelGroupAst.AsContainer());
 
 			this.Ergeebnis = Ergeebnis;
 		}

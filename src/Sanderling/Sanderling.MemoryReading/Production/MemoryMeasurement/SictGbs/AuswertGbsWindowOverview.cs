@@ -104,7 +104,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				}
 
 				var LabelAstLaage = LabelAst.PositionInParent;
-				var LabelAstGrööse = LabelAst.Grööse;
+				var LabelAstGrööse = LabelAst.Size;
 
 				if (!LabelAstLaage.HasValue)
 				{
@@ -116,8 +116,8 @@ namespace Optimat.EveOnline.AuswertGbs
 					continue;
 				}
 
-				var LabelLaageLinx = (int)((LabelAstLaage).Value.A);
-				var LabelLaageRecz = (int)((LabelAstLaage + LabelAstGrööse).Value.A);
+				var LabelLaageLinx = (int)((LabelAstLaage).Value.X);
+				var LabelLaageRecz = (int)((LabelAstLaage + LabelAstGrööse).Value.X);
 				var LabelBraite = LabelLaageRecz - LabelLaageLinx;
 
 				var ÜberlapungGrööste =
@@ -164,7 +164,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			foreach (var KandidaatSortHeaderAst in MengeKandidaatSortHeaderAst)
 			{
 				var KandidaatSortHeaderAstLaage = KandidaatSortHeaderAst.PositionInParent;
-				var KandidaatSortHeaderAstGrööse = KandidaatSortHeaderAst.Grööse;
+				var KandidaatSortHeaderAstGrööse = KandidaatSortHeaderAst.Size;
 
 				if (!KandidaatSortHeaderAstLaage.HasValue ||
 					!KandidaatSortHeaderAstGrööse.HasValue)
@@ -172,8 +172,8 @@ namespace Optimat.EveOnline.AuswertGbs
 					continue;
 				}
 
-				var KandidaatSortHeaderAstLaageLinx = (int)((KandidaatSortHeaderAstLaage).Value.A);
-				var KandidaatSortHeaderAstLaageRecz = (int)((KandidaatSortHeaderAstLaage + KandidaatSortHeaderAstGrööse).Value.A);
+				var KandidaatSortHeaderAstLaageLinx = (int)((KandidaatSortHeaderAstLaage).Value.X);
+				var KandidaatSortHeaderAstLaageRecz = (int)((KandidaatSortHeaderAstLaage + KandidaatSortHeaderAstGrööse).Value.X);
 				var KandidaatSortHeaderAstLaageBraite = KandidaatSortHeaderAstLaageRecz - KandidaatSortHeaderAstLaageLinx;
 
 				var LabelAst =

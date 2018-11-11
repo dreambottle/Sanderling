@@ -29,6 +29,7 @@ namespace Sanderling.Exe
 
 		Int64? MotionLastTime => MotionExecution?.LastOrDefault()?.End ?? MotionExecution?.LastOrDefault()?.Begin;
 
+		private const int MotionQueueLimit = 100;
 		readonly Queue<MotionExecution> MotionExecution = new Queue<MotionExecution>();
 
 		WindowMotor Motor;
@@ -58,39 +59,39 @@ namespace Sanderling.Exe
 		Task<MotionResult> ActMotionAsync(MotionParam motion)
 		{
 			return Task.Run(() =>
-		  {
-			  lock (MotorLock)
-			  {
-				  if (null == motion)
-				  {
-					  return null;
-				  }
+			{
+				lock (MotorLock)
+				{
+					if (null == motion)
+					{
+						return null;
+					}
 
-				  var Motor = this.Motor;
+					var Motor = this.Motor;
 
-				  if (null == Motor)
-				  {
-					  return null;
-				  }
+					if (null == Motor)
+					{
+						return null;
+					}
 
-				  var BeginTime = GetTimeStopwatch();
+					var BeginTime = GetTimeStopwatch();
 
-				  var Result = Motor.ActSequenceMotion(motion.AsSequenceMotion(MemoryMeasurementLast?.Value?.MemoryMeasurement));
+					var Result = Motor.ActSequenceMotion(motion.AsSequenceMotion(MemoryMeasurementLast?.Value?.MemoryMeasurement));
 
-				  var EndTime = GetTimeStopwatch();
+					var EndTime = GetTimeStopwatch();
 
-				  MotionExecution.Enqueue(new MotionExecution(motion, BeginTime, EndTime)
-				  {
-					  Result = Result,
-				  });
+					MotionExecution.Enqueue(new MotionExecution(motion, BeginTime, EndTime)
+					{
+						Result = Result,
+					});
 
-				  MotionExecution.TrimHeadToKeep(100);
+					MotionExecution.TrimHeadToKeep(MotionQueueLimit);
 
-				  return Result;
-			  }
-		  });
+					return Result;
+				}
+			});
 		}
 
 		MotionResult FromScriptMotionExecute(MotionParam motionParam) => ActMotionAsync(motionParam).Result;
-    }
+	}
 }

@@ -2,10 +2,10 @@
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
 using Sanderling.Parse;
 using System;
-using Bib3.Geometrik;
 using System.Collections.Generic;
 using System.Linq;
 using Sanderling.Accumulation;
+using Commons.Geometry;
 
 namespace Sanderling.Accumulator
 {
@@ -13,7 +13,7 @@ namespace Sanderling.Accumulator
 	{
 		public MemoryStruct.IShipUiModule Module { set; get; }
 
-		public Vektor2DInt? Location { set; get; }
+		public Vector2i? Location { set; get; }
 
 		public ShipUiModuleAndContext()
 		{
@@ -100,7 +100,7 @@ namespace Sanderling.Accumulator
 		/// <returns></returns>
 		public override int Score(Accumulation.IShipUiModuleAndContext instant, Parse.IMemoryMeasurement shared)
 		{
-			return (int)(10 - ((instant?.Location - NotDefaultLastInstant?.Value?.Location)?.Length() ?? int.MaxValue));
+			return (int)(10 - ((instant?.Location - NotDefaultLastInstant?.Value?.Location)?.Magnitude ?? int.MaxValue));
 		}
 
 		ShipUiModule()

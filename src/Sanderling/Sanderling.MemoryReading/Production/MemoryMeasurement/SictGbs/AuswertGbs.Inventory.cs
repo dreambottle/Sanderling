@@ -58,14 +58,14 @@ namespace Optimat.EveOnline.AuswertGbs
 						continue;
 					}
 
-					var InvItemAstGrööse = InvItemAst.Grööse;
+					var InvItemAstGrööse = InvItemAst.Size;
 
 					if (!InvItemAstGrööse.HasValue)
 					{
 						continue;
 					}
 
-					if (44 < InvItemAstGrööse.Value.B)
+					if (44 < InvItemAstGrööse.Value.Y)
 					{
 						SictwaiseScaintGeseztAufListNict = true;
 						break;

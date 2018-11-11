@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using Bib3;
 
 namespace Optimat.EveOnline.AuswertGbs
@@ -63,7 +63,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				?.Where((columnHeader) => null != columnHeader)
 				?.Where((columnHeader) => !(columnHeader?.Text).IsNullOrEmpty())
 				.TailmengeUnterste(ScrollNode)
-				?.OrderBy((columnHeader) => columnHeader.Region.Center().A)
+				?.OrderBy((columnHeader) => columnHeader.Region.Center().X)
 				?.GroupBy(header => header.Id)
 				?.Select(headerGroup => headerGroup.FirstOrDefault())
 				?.ToArray();

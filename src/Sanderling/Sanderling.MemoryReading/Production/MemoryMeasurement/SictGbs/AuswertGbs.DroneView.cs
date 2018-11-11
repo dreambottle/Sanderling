@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sanderling.Interface.MemoryStruct;
 using BotEngine.Common;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -73,14 +73,14 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (null == BarDamageNictAst || null == BarDamageAst)
 				return null;
 
-			var BarDamageAstGrööse = BarDamageAst.Grööse;
-			var BarDamageNictAstGrööse = BarDamageNictAst.Grööse;
+			var BarDamageAstGrööse = BarDamageAst.Size;
+			var BarDamageNictAstGrööse = BarDamageNictAst.Size;
 
 			if (!BarDamageAstGrööse.HasValue || !BarDamageNictAstGrööse.HasValue)
 				return null;
 
-			var TreferpunkteAntail = (int)BarDamageNictAstGrööse.Value.A;
-			var TreferpunkteNictAntail = (int)BarDamageAstGrööse.Value.A;
+			var TreferpunkteAntail = (int)BarDamageNictAstGrööse.Value.X;
+			var TreferpunkteNictAntail = (int)BarDamageAstGrööse.Value.X;
 
 			var GesamtGrööse = TreferpunkteAntail + TreferpunkteNictAntail;
 

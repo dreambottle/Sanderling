@@ -101,10 +101,10 @@ namespace Optimat.EveOnline.AuswertGbs
 					string.Equals("mainCont", Kandidaat.Name, StringComparison.InvariantCultureIgnoreCase),
 				3, 1);
 
-			var ExpandedContent = MainContAst.AlsContainer();
+			var ExpandedContent = MainContAst.AsContainer();
 
 			var ExpandedListLabelString =
-				MainContAst?.ExtraktMengeLabelString()?.OrdnungLabel()?.ToArray();
+				MainContAst?.ExtraktMengeLabelString()?.OrderByLabel()?.ToArray();
 
 			bool? MainContSictbar = null;
 			IUIElement ExpandToggleButton = null;
@@ -116,15 +116,15 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			if (null != HeaderBtnContExpandButtonAst)
 			{
-				ExpandToggleButton = HeaderBtnContExpandButtonAst.AlsSprite();
+				ExpandToggleButton = HeaderBtnContExpandButtonAst.AsSprite();
 			}
 
 			//	var HeaderLabel = TopContAst.GröösteLabel().AlsUIElementLabelStringFalsLabelString();
 			var HeaderLabel = TopContAst?.ExtraktMengeLabelString()?.Grööste();
 
-			var HeaderContent = TopContAst?.AlsContainer();
+			var HeaderContent = TopContAst?.AsContainer();
 
-			var Ergeebnis = new InfoPanel(InfoPanelAst.AlsContainer())
+			var Ergeebnis = new InfoPanel(InfoPanelAst.AsContainer())
 			{
 				IsExpanded = MainContSictbar,
 				ExpandToggleButton = ExpandToggleButton,

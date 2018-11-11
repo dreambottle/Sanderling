@@ -1,4 +1,4 @@
-﻿using BotEngine.Interface;
+﻿using Commons.Struct;
 using Sanderling.Interface.MemoryStruct;
 
 namespace Optimat.EveOnline.AuswertGbs
@@ -13,7 +13,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			get;
 		}
 
-		public UINodeInfoInTree LabelAst
+		public UINodeInfoInTree LabelNode
 		{
 			private set;
 			get;
@@ -25,7 +25,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			get;
 		}
 
-		public ColorORGB LabelColor
+		public ArgbColor LabelColor
 		{
 			private set;
 			get;
@@ -50,25 +50,25 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (!(true == TabAst.VisibleIncludingInheritance))
 				return;
 
-			LabelAst = TabAst.LargestLabelInSubtree(3);
+			LabelNode = TabAst.LargestLabelInSubtree(3);
 
-			if (null == LabelAst)
+			if (null == LabelNode)
 				return;
 
-			LabelColor = ColorORGB.VonVal(LabelAst.Color);
-			LabelText = LabelAst.LabelText();
+			LabelColor = LabelNode.Color;
+			LabelText = LabelNode.LabelText();
 
 			if (null == LabelText || null == LabelColor)
 				return;
 
-			var LabelColorOpazitäätMili = LabelColor.OMilli;
+			var LabelColorOpacityMilli = LabelNode.ColorAMili;
 
-			var Label = new UIElementText(LabelAst.AsUIElementIfVisible(), LabelText);
+			var Label = new UIElementText(LabelNode.AsUIElementIfVisible(), LabelText);
 
 			Ergeebnis = new Tab(TabAst.AsUIElementIfVisible())
 			{
 				Label = Label,
-				LabelColorOpacityMilli = LabelColorOpazitäätMili,
+				LabelColorOpacityMilli = LabelColorOpacityMilli,
 			};
 		}
 	}

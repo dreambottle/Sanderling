@@ -1,5 +1,6 @@
 ﻿using Bib3;
 using BotEngine.Common;
+using Commons.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -187,7 +188,7 @@ namespace Sanderling.Parse
 
 			var PostDecimalSeparatorValueMikro =
 				0 < PostDecimalSeparatorLessSeparator.Length ?
-				(Int64)(Int64.Parse(PostDecimalSeparatorLessSeparator) * Math.Pow(10, 6 - PostDecimalSeparatorLessSeparator.Length)) :
+				(Int64.Parse(PostDecimalSeparatorLessSeparator) * Math2.IPowBase10(6 - PostDecimalSeparatorLessSeparator.Length)) :
 				0;
 
 			return Sign * (PreDecimalSeparatorValue * 1000 + PostDecimalSeparatorValueMikro / 1000);

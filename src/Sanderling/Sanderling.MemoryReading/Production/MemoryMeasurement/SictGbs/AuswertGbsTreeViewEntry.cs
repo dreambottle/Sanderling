@@ -151,7 +151,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					.Where((Kandidaat) => null != Kandidaat)
 					.ToArray();
 
-			var Ergeebnis = new TreeViewEntry(TreeViewEntryAst.AlsContainer())
+			var Ergeebnis = new TreeViewEntry(TreeViewEntryAst.AsContainer())
 			{
 				ExpandToggleButton = ExpandCollapseToggleFläce,
 				Child = MengeChild,

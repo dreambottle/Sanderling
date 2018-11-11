@@ -2,7 +2,7 @@
 using BotEngine.Common;
 using System.Linq;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using System.Collections.Generic;
 
 namespace Sanderling.Parse
@@ -194,7 +194,7 @@ namespace Sanderling.Parse
 
 		MemoryStruct.IContainer MemoryStruct.IMemoryMeasurement.ModuleButtonTooltip => ModuleButtonTooltip;
 
-		public Vektor2DInt ScreenSize => Raw?.ScreenSize ?? default(Vektor2DInt);
+		public Vector2i ScreenSize => Raw?.ScreenSize ?? default(Vector2i);
 
 		IEnumerable<IMenu> IMemoryMeasurement.Menu => Menu;
 

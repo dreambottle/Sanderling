@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
 using Bib3;
 using BotEngine.Windows;
+using Sanderling.Interface.Compat;
 
 namespace Sanderling.Motor
 {
@@ -79,27 +79,28 @@ namespace Sanderling.Motor
 						memoryMeasurement,
 						c => SetElementExcludedFromOcclusion?.Contains(c) ?? false)
 					//	remaining region is contracted to provide a safety margin.
-					?.Select(portionVisible => portionVisible.WithSizeExpandedPivotAtCenter(-MotionMouseWaypointSafetyMarginMin * 2))
-					?.Where(portionVisible => !portionVisible.IsEmpty())
+					?.Select(portionVisible => portionVisible.ResizedPivotAtCenter(-MotionMouseWaypointSafetyMarginMin * 2))
+					?.Where(portionVisible => portionVisible.Area() > 0)
 					?.ToArray();
 
 				var WaypointRegionPortionVisibleLargestPatch =
 					WaypointRegionPortionVisible
-					?.OrderByDescending(patch => Math.Min(patch.Side0Length(), patch.Side1Length()))
-					?.FirstOrDefault();
+					?.OrderByDescending(patch => Math.Min(patch.X1 - patch.X0, patch.Y1 - patch.Y0))
+					?.FirstOrNull();
 
-				if (!(0 < WaypointRegionPortionVisibleLargestPatch?.Side0Length() &&
-					0 < WaypointRegionPortionVisibleLargestPatch?.Side1Length()))
+				//if (!(0 < WaypointRegionPortionVisibleLargestPatch?.Side0Length() &&
+				//	0 < WaypointRegionPortionVisibleLargestPatch?.Side1Length()))
+				if (!WaypointRegionPortionVisibleLargestPatch.HasValue)
 				{
 					throw new ApplicationException("mouse waypoint region remaining after occlusion is too small");
 				}
 
 				var Point =
 					WaypointRegionPortionVisibleLargestPatch.Value
-					.WithSizeExpandedPivotAtCenter(-MotionMouseWaypointSafetyMarginAdditional * 2)
+					.ResizedPivotAtCenter(-MotionMouseWaypointSafetyMarginAdditional * 2)
 					.RandomPointInRectangle(Random);
 
-				yield return new Motion(Point);
+				yield return new Motion(Point.AsVektor2dInt());
 
 				if (0 == WaypointIndex)
 				{
@@ -134,7 +135,7 @@ namespace Sanderling.Motor
 				yield return new Motion(null, textEntry: MotionTextEntry);
 		}
 
-		static public Vektor2DInt? ClientToScreen(this IntPtr hWnd, Vektor2DInt locationInClient)
+		static public Bib3.Geometrik.Vektor2DInt? ClientToScreen(this IntPtr hWnd, Bib3.Geometrik.Vektor2DInt locationInClient)
 		{
 			var structWinApi = locationInClient.AsWindowsPoint();
 

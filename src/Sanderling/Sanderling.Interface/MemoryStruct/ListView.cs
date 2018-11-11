@@ -1,4 +1,4 @@
-﻿using BotEngine.Interface;
+﻿using Commons.Struct;
 using System.Collections.Generic;
 
 namespace Sanderling.Interface.MemoryStruct
@@ -21,7 +21,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		bool? IsExpanded { get; }
 
-		ColorORGB[] ListBackgroundColor { get; }
+		ArgbColor[] ListBackgroundColor { get; }
 
 		ISprite[] SetSprite { get; }
 	}
@@ -83,7 +83,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		public bool? IsSelected { set; get; }
 
-		public ColorORGB[] ListBackgroundColor { set; get; }
+		public ArgbColor[] ListBackgroundColor { set; get; }
 
 		public ISprite[] SetSprite { set; get; }
 

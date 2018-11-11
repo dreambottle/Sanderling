@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BotEngine.Interface;
-using Sanderling.MemoryReading.Production;
+using Commons.Geometry;
+using Commons.Struct;
 
 namespace Optimat.EveOnline
 {
@@ -105,7 +106,7 @@ namespace Optimat.EveOnline
 
 		public float? StructureLevel;
 
-		public GbsNodeInfo[] ListChild;
+		public GbsNodeInfo[] Children;
 
 		public GbsNodeInfo[] BackgroundList;
 
@@ -117,20 +118,20 @@ namespace Optimat.EveOnline
 
 		public bool? RampActive;
 
-		public ColorORGBVal? Color
+		public ArgbColor Color
 		{
 			set
 			{
-				assignToComponents(Color, ref ColorAMili, ref ColorRMili, ref ColorGMili, ref ColorBMili);
+				AssignToComponents(value, ref ColorAMili, ref ColorRMili, ref ColorGMili, ref ColorBMili);
 			}
 
 			get
 			{
-				return createColorArgbFromComponents(ColorAMili, ColorRMili, ColorGMili, ColorBMili);
+				return CreateColorArgbFromComponents(ColorAMili, ColorRMili, ColorGMili, ColorBMili);
 			}
 		}
 
-		public Vector2DSingle? PositionInParent
+		public Vector2f? PositionInParent
 		{
 			set
 			{
@@ -139,11 +140,11 @@ namespace Optimat.EveOnline
 
 			get
 			{
-				return ComponentToVector2D(PositionInParentA, PositionInParentB);
+				return ComponentToVector2f(PositionInParentA, PositionInParentB);
 			}
 		}
 
-		public Vector2DSingle? Grööse
+		public Vector2f? Size
 		{
 			set
 			{
@@ -152,7 +153,7 @@ namespace Optimat.EveOnline
 
 			get
 			{
-				return ComponentToVector2D(SizeA, SizeB);
+				return ComponentToVector2f(SizeA, SizeB);
 			}
 		}
 
@@ -168,48 +169,48 @@ namespace Optimat.EveOnline
 
 		virtual public IEnumerable<GbsNodeInfo> GetChildList()
 		{
-			return ListChild;
+			return Children;
 		}
 
 		static public void assignToComponents(
-			Vector2DSingle? vector,
-			ref float? componentA,
-			ref float? componentB)
+			Vector2f? vector,
+			ref float? componentX,
+			ref float? componentY)
 		{
-			componentA = vector?.A;
-			componentB = vector?.B;
+			componentX = vector?.X;
+			componentY = vector?.Y;
 		}
 
-		static public Vector2DSingle? ComponentToVector2D(
+		static public Vector2f? ComponentToVector2f(
 			float? a,
 			float? b)
 		{
 			if (!a.HasValue || !b.HasValue)
 				return null;
 
-			return new Vector2DSingle(a.Value, b.Value);
+			return new Vector2f(a.Value, b.Value);
 		}
 
-		static public void assignToComponents(
-			ColorORGBVal? color,
+		static public void AssignToComponents(
+			ArgbColor color,
 			ref int? componentAMili,
 			ref int? componentRMili,
 			ref int? componentGMili,
 			ref int? componentBMili)
 		{
-			componentAMili = color?.OMilli;
+			componentAMili = color?.AMilli;
 			componentRMili = color?.RMilli;
 			componentGMili = color?.GMilli;
 			componentBMili = color?.BMilli;
 		}
 
-		static public ColorORGBVal? createColorArgbFromComponents(
+		static public ArgbColor CreateColorArgbFromComponents(
 			int? aMilli,
 			int? rMilli,
 			int? gMilli,
 			int? bMilli)
 		{
-			return new ColorORGBVal(aMilli, rMilli, gMilli, bMilli);
+			return new ArgbColor(aMilli, rMilli, gMilli, bMilli);
 		}
 
 		public IEnumerable<GbsNodeInfo> EnumerateChildNodeTransitiveHüle(

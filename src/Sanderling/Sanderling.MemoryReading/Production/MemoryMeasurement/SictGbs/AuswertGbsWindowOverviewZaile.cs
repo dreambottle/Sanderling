@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Bib3;
-using BotEngine.Interface;
 using Sanderling.Interface.MemoryStruct;
 using BotEngine.Common;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -98,7 +97,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			this.WindowOverviewTypeSelectionName = WindowOverviewTypeSelectionName;
 			this.MengeSortHeaderTitelUndLaage = MengeSortHeaderTitelUndLaage;
 		}
-
+		
 		public void Berecne()
 		{
 			var WindowOverviewZaile = this.WindowOverviewZaile;
@@ -113,7 +112,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				return;
 			}
 
-			var ZaileMengeChild = WindowOverviewZaile.ListChild;
+			var ZaileMengeChild = WindowOverviewZaile.Children;
 
 			if (null == ZaileMengeChild)
 			{
@@ -134,7 +133,7 @@ namespace Optimat.EveOnline.AuswertGbs
 						return string.Equals("OverviewLabel", KandidaatPyObjTypName, StringComparison.InvariantCultureIgnoreCase);
 					})
 				.Where((Kandidaat) => Kandidaat.PositionInParent.HasValue)
-				.OrderBy((Kandidaat) => Kandidaat.PositionInParent.Value.A)
+				.OrderBy((Kandidaat) => Kandidaat.PositionInParent.Value.X)
 				.ToArray();
 
 			/*
@@ -213,12 +212,10 @@ namespace Optimat.EveOnline.AuswertGbs
 				?.ToArray();
 
 			Int64? IconMainTextureIdent = null;
-			ColorORGB IconMainColor = null;
 
 			if (null != AstIconContainerIconMain)
 			{
 				IconMainTextureIdent = AstIconContainerIconMain.TextureIdent0;
-				IconMainColor = ColorORGB.VonVal(AstIconContainerIconMain.Color);
 			}
 
 			Int64[] RightAlignedIconMengeTextureIdent = null;
@@ -264,9 +261,9 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var RightIcon =
 				RightIconContainer?.MatchingNodesFromSubtreeBreadthFirst(AuswertGbs.Glob.PyObjTypNameIsIcon)
-				?.Select(AuswertGbs.Extension.AlsSprite)
+				?.Select(AuswertGbs.Extension.AsSprite)
 				?.WhereNotDefault()
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArray();
 
 			var MainIconSetIndicatorName =

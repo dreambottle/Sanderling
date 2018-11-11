@@ -106,15 +106,15 @@ namespace Optimat.EveOnline.AuswertGbs
 				NeocomListButtonAst
 				?.Where(ButtonAst => ButtonAst?.VisibleIncludingInheritance ?? false)
 				?.Select(ButtonAst => new UIElementText(ButtonAst.AsUIElementIfVisible(), ButtonAst?.Name))
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArray();
 
 			var Button =
 				NeocomListButtonAst
 				?.Select(ButtonAst => ButtonAst?.FirstMatchingNodeFromSubtreeBreadthFirst(k => k.PyObjTypNameIsSprite()))
 				?.WhereNotDefault()
-				?.Select(Extension.AlsSprite)
-				?.OrdnungLabel()
+				?.Select(Extension.AsSprite)
+				?.OrderByLabel()
 				?.ToArray();
 
 			NeocomClockLabelAst =

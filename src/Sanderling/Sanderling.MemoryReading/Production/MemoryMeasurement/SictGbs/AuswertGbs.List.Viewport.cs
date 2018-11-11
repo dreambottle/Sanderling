@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Bib3;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
 using BotEngine.Common;
+using Commons.Geometry;
+using Sanderling.Compat;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -16,7 +17,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (!(ColumnHeaderAst?.VisibleIncludingInheritance ?? false))
 				return null;
 
-			var container = ColumnHeaderAst?.AlsContainer(
+			var container = ColumnHeaderAst?.AsContainer(
 				treatIconAsSprite: true);
 
 			if (null == container)
@@ -229,8 +230,8 @@ namespace Optimat.EveOnline.AuswertGbs
 		}
 
 		static public Int64 ÜberlapungBetraag(IUIElement uIElement, IUIElement header) =>
-			Math.Min(uIElement?.Region.Max0 ?? int.MinValue, header?.Region.Max0 ?? int.MinValue) -
-			Math.Max(uIElement?.Region.Min0 ?? int.MaxValue, header?.Region.Min0 ?? int.MaxValue);
+			Math.Min(uIElement?.Region.X1 ?? int.MinValue, header?.Region.X1 ?? int.MinValue) -
+			Math.Max(uIElement?.Region.X0 ?? int.MaxValue, header?.Region.X0 ?? int.MaxValue);
 
 		static public T HeaderBestFit<T>(
 			IUIElement zeleUIElement,
@@ -244,7 +245,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 		virtual public void Berecne()
 		{
-			var Container = EntryAst.AlsContainer(regionConstraint: RegionConstraint);
+			var Container = EntryAst.AsContainer(regionConstraint: RegionConstraint);
 
 			if (null == Container)
 				return;
@@ -349,8 +350,8 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var ListBackgroundColor =
 				EntryAst?.BackgroundList
-				?.Select(background => background.Color.AlsColorORGB())
-				.ConcatNullable(new[] { backgroundColorNode?.Color.AlsColorORGB() })
+				?.Select(background => background.Color)
+				.ConcatNullable(new[] { backgroundColorNode.Color })
 				?.WhereNotDefault()
 				?.ToArrayIfNotEmpty();
 
@@ -506,10 +507,10 @@ namespace Optimat.EveOnline.AuswertGbs
 			var clipperRegion = ScrollClipperContentNode?.AsUIElementIfVisible()?.Region;
 
 			var listEntry =
-				ScrollClipperContentNode?.ListChild
+				ScrollClipperContentNode?.Children
 				?.Select(kandidaatEntryAst => CallbackListEntryConstruct(kandidaatEntryAst, ListeHeaderInfo, clipperRegion))
 				?.WhereNotDefault()
-				?.OrderBy(entry => entry.Region.Center().B)
+				?.OrderBy(entry => entry.Region.Center().Y)
 				?.ToArray();
 
 			Result = new ListViewAndControl<EntryT>(ListViewNode.AsUIElementIfVisible())

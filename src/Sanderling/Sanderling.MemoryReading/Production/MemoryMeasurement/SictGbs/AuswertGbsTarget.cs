@@ -4,7 +4,7 @@ using System.Linq;
 using Bib3;
 using Sanderling.Interface.MemoryStruct;
 using System.Text.RegularExpressions;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using BotEngine.Common;
 
 namespace Optimat.EveOnline.AuswertGbs
@@ -207,7 +207,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var AusLabelContainerMengeLabelMitTextOrdnet =
 				AusLabelContainerMengeLabelMitText
-				.OrderBy((kandidaat) => kandidaat.Key.LaagePlusVonParentErbeLaage().Value.B)
+				.OrderBy((kandidaat) => kandidaat.Key.LaagePlusVonParentErbeLaage().Value.Y)
 				.ToArray();
 
 			if (AusLabelContainerMengeLabelMitTextOrdnet.Length < 2 ||
@@ -245,7 +245,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			Ergeebnis = new ShipUiTarget(
 				TargetAst.AsUIElementIfVisible())
 			{
-				LabelText = TargetAst?.ExtraktMengeLabelString()?.OrdnungLabel()?.ToArray(),
+				LabelText = TargetAst?.ExtraktMengeLabelString()?.OrderByLabel()?.ToArray(),
 				IsSelected = Active,
 				Hitpoints = Treferpunkte,
 				RegionInteractionElement = RegioonInputFookusSeze,

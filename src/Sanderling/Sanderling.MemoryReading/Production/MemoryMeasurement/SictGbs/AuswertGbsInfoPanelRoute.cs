@@ -106,7 +106,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			{
 				NextLabel = AstCurrentParentLabel.LargestLabelInSubtree().AsUIElementTextIfTextNotEmpty(),
 				DestinationLabel = AstEndParentLabel.LargestLabelInSubtree().AsUIElementTextIfTextNotEmpty(),
-				RouteElementMarker = MengeMarker?.OrdnungLabel()?.ToArray(),
+				RouteElementMarker = MengeMarker?.OrderByLabel()?.ToArray(),
 			};
 		}
 	}

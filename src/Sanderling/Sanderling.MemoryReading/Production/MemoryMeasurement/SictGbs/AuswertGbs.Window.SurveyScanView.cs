@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {

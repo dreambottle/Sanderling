@@ -30,7 +30,7 @@ namespace Sanderling.Test.Exe.Parse
 			{
 				In = "not a number",
 				Out = 0,
-				Culture = CultureInfo.CurrentCulture,
+				Culture = CultureInfo.GetCultureInfoByIetfLanguageTag("en"),
 			}.Yield()),
 			Throws.Exception);
 		}

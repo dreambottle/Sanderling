@@ -6,6 +6,7 @@ using Bib3;
 using BotEngine.Interface;
 using BotEngine.Common;
 using Sanderling.MemoryReading.Production;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline
 {
@@ -364,7 +365,7 @@ namespace Optimat.EveOnline
 											}
 										}
 
-										GbsAst.Info = GbsAstPyObj.AstInfo;
+										GbsAst.Info = GbsAstPyObj.NodeInfo;
 
 										bool GbsAstGeändert;
 										bool GbsAstDictGeändert;
@@ -392,7 +393,7 @@ namespace Optimat.EveOnline
 											BeginZaitMili,
 											null);
 
-										var AstInfo = GbsAstPyObj.AstInfo;
+										var AstInfo = GbsAstPyObj.NodeInfo;
 
 										{
 											//	Mesung MemoryBlock aus RenderObject (darin sin z.B. Laage und Grööse enthalte)
@@ -442,12 +443,12 @@ namespace Optimat.EveOnline
 
 												if (null != Laage)
 												{
-													AstInfo.PositionInParent = new Vector2DSingle(Laage[0], Laage[1]);
+													AstInfo.PositionInParent = new Vector2f(Laage[0], Laage[1]);
 												}
 
 												if (null != Grööse)
 												{
-													AstInfo.Grööse = new Vector2DSingle(Grööse[0], Grööse[1]);
+													AstInfo.Size = new Vector2f(Grööse[0], Grööse[1]);
 												}
 											}
 										}
@@ -635,7 +636,7 @@ namespace Optimat.EveOnline
 										if (!(true == AstInfo.VisibleIncludingInheritance))
 										{
 											//	Nict sictbaare Ast werde ignoriirt.
-											AstInfo.ListChild = null;
+											AstInfo.Children = null;
 											continue;
 										}
 
@@ -671,7 +672,7 @@ namespace Optimat.EveOnline
 
 											if (null == DictEntryChildrenDictEntryListChildrenObj)
 											{
-												GbsAstPyObj.ListeChild.Clear();
+												GbsAstPyObj.Children.Clear();
 											}
 											else
 											{
@@ -692,7 +693,7 @@ namespace Optimat.EveOnline
 
 													if (null == ChildrenListeItemRef)
 													{
-														GbsAstPyObj.ListeChild.Clear();
+														GbsAstPyObj.Children.Clear();
 													}
 													else
 													{
@@ -721,21 +722,21 @@ namespace Optimat.EveOnline
 																ChildObj = null;
 															}
 
-															if (GbsAstPyObj.ListeChild.Count <= ElementIndex)
+															if (GbsAstPyObj.Children.Count <= ElementIndex)
 															{
-																GbsAstPyObj.ListeChild.Add(ChildObj);
+																GbsAstPyObj.Children.Add(ChildObj);
 															}
 															else
 															{
-																GbsAstPyObj.ListeChild[ElementIndex] = ChildObj;
+																GbsAstPyObj.Children[ElementIndex] = ChildObj;
 															}
 														}
 
-														var AnEndeZuEntferneAnzaal = GbsAstPyObj.ListeChild.Count - AstListeChildAnzaal;
+														var AnEndeZuEntferneAnzaal = GbsAstPyObj.Children.Count - AstListeChildAnzaal;
 
 														if (0 < AnEndeZuEntferneAnzaal)
 														{
-															GbsAstPyObj.ListeChild.RemoveRange(AstListeChildAnzaal, AnEndeZuEntferneAnzaal);
+															GbsAstPyObj.Children.RemoveRange(AstListeChildAnzaal, AnEndeZuEntferneAnzaal);
 														}
 													}
 												}
@@ -744,7 +745,7 @@ namespace Optimat.EveOnline
 
 										GbsAstPyObj.ListeChildPropagiireNaacInfoObjekt();
 
-										foreach (var Child in GbsAstPyObj.ListeChild)
+										foreach (var Child in GbsAstPyObj.Children)
 										{
 											MengeGbsAstZuVerarbaite.Add(new SictInBerecnungAst(GbsAst, Child, GbsAst.TiifeScrankeMax - 1));
 										}
@@ -1267,7 +1268,7 @@ namespace Optimat.EveOnline
 				}
 			}
 
-			var ZiilAstInfo = GbsAst.AstInfo;
+			var ZiilAstInfo = GbsAst.NodeInfo;
 
 			if (null != GbsAst && null != ZiilAstInfo)
 			{
@@ -1689,7 +1690,7 @@ namespace Optimat.EveOnline
 
 								AstInfoScteleSicerAktuelOoneListeChild(BackgroundObj, AusProzesLeeser, ProzesAuswertZuusctand, Zait, null);
 
-								BackgroundList.Add(BackgroundObj.AstInfo);
+								BackgroundList.Add(BackgroundObj.NodeInfo);
 							}
 
 							ZiilAstInfo.BackgroundList = BackgroundList.ToArray();

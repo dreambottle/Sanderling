@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
 using BotEngine.Common;
 using Sanderling.Interface.MemoryStruct;
@@ -97,7 +97,7 @@ namespace Sanderling.Parse
 			base(raw)
 		{
 			ManeuverType =
-				LabelText?.OrderBy(label => label.RegionCenter()?.B)?.FirstOrDefault()?.Text?.ManeuverTypeFromShipUiIndicationText();
+				LabelText?.OrderBy(label => label.RegionCenter()?.Y)?.FirstOrDefault()?.Text?.ManeuverTypeFromShipUiIndicationText();
 		}
 	}
 

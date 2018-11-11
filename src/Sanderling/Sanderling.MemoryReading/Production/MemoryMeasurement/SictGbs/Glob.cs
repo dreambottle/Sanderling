@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Bib3;
 using BotEngine;
+using Commons.Geometry;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -146,20 +145,20 @@ namespace Optimat.EveOnline.AuswertGbs
 		}
 
 		static public RectInt? FläceAusGbsAstInfoMitVonParentErbe(
-			UINodeInfoInTree gbsAstInfo)
+			UINodeInfoInTree gbsNodeInfo)
 		{
-			if (null == gbsAstInfo)
+			if (null == gbsNodeInfo)
 				return null;
 
-			var Grööse = gbsAstInfo.Grööse;
-			var MiteLaage = gbsAstInfo.LaagePlusVonParentErbeLaage() + (Grööse * 0.5);
+			var size = gbsNodeInfo.Size;
+			var MiteLaage = gbsNodeInfo.LaagePlusVonParentErbeLaage() + (size * 0.5);
 
-			if (!Grööse.HasValue || !MiteLaage.HasValue)
+			if (!size.HasValue || !MiteLaage.HasValue)
 				return null;
 
 			return RectInt.FromCenterAndSize(
-				MiteLaage.Value.AlsVektor2DInt(),
-				Grööse.Value.AlsVektor2DInt());
+				MiteLaage.Value.AsVector2i(),
+				size.Value.AsVector2i());
 		}
 
 		static public KeyValuePair<Func<UINodeInfoInTree, Window>, string[]>[]

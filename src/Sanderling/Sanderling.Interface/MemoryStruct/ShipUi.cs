@@ -1,4 +1,4 @@
-﻿using Bib3.Geometrik;
+﻿using Commons.Geometry;
 using System;
 
 namespace Sanderling.Interface.MemoryStruct
@@ -123,7 +123,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		public IUIElement RegionInteractionElement { set; get; }
 
-		override public IUIElement RegionInteraction => RegionInteractionElement?.WithRegionSizeBoundedMaxPivotAtCenter(new Vektor2DInt(40, 40));
+		override public IUIElement RegionInteraction => RegionInteractionElement?.WithRegionSizeBoundedMaxPivotAtCenter(new Vector2i(40, 40));
 
 		public ShipUiTargetAssignedGroup[] Assigned { set; get; }
 
@@ -179,7 +179,7 @@ namespace Sanderling.Interface.MemoryStruct
 
 		public bool? OverloadOn { set; get; }
 
-		public override IUIElement RegionInteraction => this.WithRegionSizeBoundedMaxPivotAtCenter(new Vektor2DInt(16, 16));
+		public override IUIElement RegionInteraction => this.WithRegionSizeBoundedMaxPivotAtCenter(new Vector2i(16, 16));
 
 		public ShipUiModule()
 		{

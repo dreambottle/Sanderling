@@ -86,6 +86,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{701aaefd-064a-4fa0-90d8-6f2dd7d253d3}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sanderling.Interface\Sanderling.Interface.csproj">
       <Project>{a765bfb5-945c-4106-9576-30ec485c9c41}</Project>
       <Name>Sanderling.Interface</Name>

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Bib3;
 using BotEngine.Interface;
+using Commons.Struct;
+using Sanderling.Compat;
 using Sanderling.Interface.MemoryStruct;
 
 namespace Optimat.EveOnline.AuswertGbs
@@ -34,7 +36,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			get;
 		}
 
-		public ColorORGB DamageTypColor
+		public ArgbColor DamageTypColor
 		{
 			private set;
 			get;
@@ -70,24 +72,19 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			if (null != MengeFillAst)
 			{
-				var MengeFillAstColor =
+				DamageTypColor =
 					MengeFillAst
 					.Select((ast) => ast.Color)
-					.Where((color) => null == color ? false : color.Value.AleUnglaicNul())
-					.ToArray();
-
-				DamageTypColor =
-					ColorORGB.VonVal(
-					MengeFillAstColor
-					.OrderBy((color) => color.Value.OMilli ?? 0)
-					.LastOrDefault());
+					.Where((color) => color.AllNotNull())
+					.OrderBy((color) => color.AMilli ?? 0)
+					.LastOrDefault();
 			}
 		}
 	}
 
 	public class SictAuswertGbsWindowShipFitting : SictAuswertGbsWindow
 	{
-		new static public WindowShipFitting	BerecneFürWindowAst(
+		new static public WindowShipFitting BerecneFürWindowAst(
 			UINodeInfoInTree windowAst)
 		{
 			if (null == windowAst)

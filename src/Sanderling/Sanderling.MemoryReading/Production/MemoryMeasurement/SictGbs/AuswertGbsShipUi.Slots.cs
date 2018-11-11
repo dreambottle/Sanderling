@@ -55,7 +55,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				MengeKandidaatSlotAuswert
 				?.Select(slotAuswert => slotAuswert.ModuleRepr)
 				.WhereNotDefault()
-				.OrderBy(slot => slot?.RegionCenter()?.A)
+				.OrderBy(slot => slot?.RegionCenter()?.X)
 				.ToArray();
 		}
 	}

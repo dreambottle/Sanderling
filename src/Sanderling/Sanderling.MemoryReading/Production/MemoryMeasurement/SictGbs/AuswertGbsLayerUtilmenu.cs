@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using BotEngine.EveOnline.Sensor;
-using BotEngine.EveOnline.Sensor.Option;
+using Commons.Geometry;
 using Sanderling.Interface.MemoryStruct;
-using Sanderling.MemoryReading.Production;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -66,7 +63,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			}
 
 			var KandidaatUtilmenuLaagePlusVonParentErbeLaageNulbar = KandidaatUtilmenuAst.LaagePlusVonParentErbeLaage();
-			var KandidaatUtilmenuGrööseNulbar = KandidaatUtilmenuAst.Grööse;
+			var KandidaatUtilmenuGrööseNulbar = KandidaatUtilmenuAst.Size;
 
 			if (!KandidaatUtilmenuGrööseNulbar.HasValue)
 			{
@@ -82,14 +79,14 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var KandidaatUtilmenuEkeLinksUnteLaage =
 				KandidaatUtilmenuLaagePlusVonParentErbeLaageNulbar.Value +
-				new Vector2DSingle(0, KandidaatUtilmenuGrööseNulbar.Value.B);
+				new Vector2f(0, KandidaatUtilmenuGrööseNulbar.Value.Y);
 
 			var VonUtilmenuNaacExpandedUtilmenuSctreke =
 				ExpandedUtilMenuAstLaagePlusVonParentErbeLaage.Value +
-				new Vector2DSingle(0, 1) -
+				new Vector2f(0, 1) -
 				KandidaatUtilmenuEkeLinksUnteLaage;
 
-			if (4 < VonUtilmenuNaacExpandedUtilmenuSctreke.Betraag)
+			if (4 < VonUtilmenuNaacExpandedUtilmenuSctreke.Magnitude)
 			{
 				return false;
 			}

@@ -109,7 +109,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (!(AstWindow?.VisibleIncludingInheritance ?? false))
 				return;
 
-			if (!(true == AstWindow.ListChild?.Any((kandidaat) => (null == kandidaat ? null : kandidaat.VisibleIncludingInheritance) ?? false)))
+			if (!(true == AstWindow.Children?.Any((kandidaat) => (null == kandidaat ? null : kandidaat.VisibleIncludingInheritance) ?? false)))
 			{
 				/*
 				 * B:\Berict\Berict.Nuzer\[ZAK=2014.09.17.13.27.59,NB=25].Anwendung.Berict:
@@ -151,7 +151,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					string.Equals("main", kandidaat.Name, StringComparison.InvariantCultureIgnoreCase),
 					2, 1);
 
-			var container = AstWindow.AlsContainer();
+			var container = AstWindow.AsContainer();
 
 			if (null == container)
 				return;
@@ -180,7 +180,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				?.MatchingNodesFromSubtreeBreadthFirst(k =>
 				(k?.VisibleIncludingInheritance ?? false) &&
 				k.PyObjTypNameMatchesRegex(HeaderButtonTypeRegex))
-				?.Select(k => k.AlsSprite())
+				?.Select(k => k.AsSprite())
 				?.WhereNotDefault()
 				?.ToArrayIfNotEmpty();
 

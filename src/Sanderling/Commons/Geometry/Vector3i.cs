@@ -64,9 +64,9 @@ namespace Commons.Geometry
 		}
 
 		// Properties
-		public float sqrMagnitude => (float)X * X + (float)Y * Y + (float)Z * Z;
+		public float SqrMagnitude => (float)X * X + (float)Y * Y + (float)Z * Z;
 
-		public float magnitude => (float)Math.Sqrt(sqrMagnitude);
+		public float Magnitude => (float)Math.Sqrt(SqrMagnitude);
 
 		public bool IsWithinBounds(Vector3i from, Vector3i to)
 		{
@@ -163,7 +163,7 @@ namespace Commons.Geometry
 			XYZ
 		}
 
-		private static int[,] loopCoords = new int[,]{
+		private static readonly int[,] loopCoords = new int[,]{
 			{2,1,0},
 			{2,0,1},
 			{0,2,1},
@@ -184,7 +184,7 @@ namespace Commons.Geometry
 				throw new ArgumentNullException(nameof(body));
 			}
 
-			var iterator = Vector3i.zero;
+			var iterator = Vector3i.Zero;
 			for (iterator.X = from.X; iterator.X < to.X; iterator.X++)
 			{
 				for (iterator.Y = from.Y; iterator.Y < to.Y; iterator.Y++)
@@ -198,10 +198,7 @@ namespace Commons.Geometry
 		}
 
 		// ToString
-		public override string ToString()
-		{
-			return string.Format("({0}, {1}, {2})", X, Y, Z);
-		}
+		public override string ToString() => $"{{{nameof(Vector3i)}}}({X}, {Y}, {Z})";
 
 		// Operators
 		public static Vector3i operator +(Vector3i a, Vector3i b)
@@ -286,7 +283,7 @@ namespace Commons.Geometry
 
 		public static float Distance(Vector3i a, Vector3i b)
 		{
-			return (a - b).magnitude;
+			return (a - b).Magnitude;
 		}
 
 		public static Vector3i Min(Vector3i lhs, Vector3i rhs)
@@ -323,53 +320,53 @@ namespace Commons.Geometry
 			);
 		}
 
-		public static float Magnitude(Vector3i a)
+		public static float MagnitudeOf(Vector3i a)
 		{
-			return a.magnitude;
+			return a.Magnitude;
 		}
 
-		public static float SqrMagnitude(Vector3i a)
+		public static float SqrMagnitudeOf(Vector3i a)
 		{
-			return a.sqrMagnitude;
+			return a.SqrMagnitude;
 		}
 
 		// Default values
-		public static Vector3i back
+		public static Vector3i Back
 		{
 			get { return new Vector3i(0, 0, -1); }
 		}
 
-		public static Vector3i forward
+		public static Vector3i Forward
 		{
 			get { return new Vector3i(0, 0, 1); }
 		}
 
-		public static Vector3i down
+		public static Vector3i Down
 		{
 			get { return new Vector3i(0, -1, 0); }
 		}
 
-		public static Vector3i up
+		public static Vector3i Up
 		{
 			get { return new Vector3i(0, +1, 0); }
 		}
 
-		public static Vector3i left
+		public static Vector3i Left
 		{
 			get { return new Vector3i(-1, 0, 0); }
 		}
 
-		public static Vector3i right
+		public static Vector3i Right
 		{
 			get { return new Vector3i(+1, 0, 0); }
 		}
 
-		public static Vector3i one
+		public static Vector3i One
 		{
 			get { return new Vector3i(+1, +1, +1); }
 		}
 
-		public static Vector3i zero
+		public static Vector3i Zero
 		{
 			get { return new Vector3i(0, 0, 0); }
 		}

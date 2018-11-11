@@ -2,7 +2,7 @@
 using System.Linq;
 using Sanderling.Interface.MemoryStruct;
 using Bib3;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -59,7 +59,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				ast.EnumerateChildNodeTransitiveHüle()
 				?.OfType<UINodeInfoInTree>()
 				?.FirstOrDefault(k => k.PyObjTypNameIsSprite() && (k.PyObjTypName?.ToLower().Contains("status") ?? false))
-				?.AlsSprite();
+				?.AsSprite();
 
 			var SetFlagWithStateIconNode =
 				ast?.EnumerateChildNodeTransitiveHüle()
@@ -71,12 +71,12 @@ namespace Optimat.EveOnline.AuswertGbs
 				SetFlagWithStateIconNode
 				?.Select(flagNode =>
 				{
-					var FlagIcon = flagNode.AlsSprite();
+					var FlagIcon = flagNode.AsSprite();
 
 					var childSprite =
 						flagNode?.EnumerateChildNodeTransitiveHüle()?.OfType<UINodeInfoInTree>()
 						?.Where(k => k.PyObjTypNameIsSprite())
-						?.Select(k => k?.AlsSprite())?.WhereNotDefault()?.FirstOrDefault();
+						?.Select(k => k?.AsSprite())?.WhereNotDefault()?.FirstOrDefault();
 
 					if (null != FlagIcon)
 					{
@@ -120,12 +120,12 @@ namespace Optimat.EveOnline.AuswertGbs
 			//	Assume we find the container of the messages on the left from the center of the window.
 			var ViewportSetMessageAst =
 				scrollNodesWithRegionCenter
-				?.FirstOrDefault(nodeWithCenter => nodeWithCenter.regionCenter?.A < mainContainerCenter?.A).node;
+				?.FirstOrDefault(nodeWithCenter => nodeWithCenter.regionCenter?.X < mainContainerCenter?.X).node;
 
 			//	Assume we find the container of the participants on the right from the center of the window.
 			var ViewportSetParticipantAst =
 				scrollNodesWithRegionCenter
-				?.FirstOrDefault(nodeWithCenter => mainContainerCenter?.A < nodeWithCenter.regionCenter?.A).node;
+				?.FirstOrDefault(nodeWithCenter => mainContainerCenter?.X < nodeWithCenter.regionCenter?.X).node;
 
 			var FunkIsOther = new Func<IObjectIdInMemory, bool>(obj =>
 			  !(ViewportSetMessageAst?.EnthaltAstMitHerkunftAdrese(obj.Id) ?? false) &&
@@ -134,7 +134,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			var LabelOther =
 				AstMainContainer.ExtraktMengeLabelString()
 				?.Where(label => FunkIsOther(label))
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArray();
 
 			if (null != ViewportSetMessageAst)
@@ -152,7 +152,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			var MessageInputAst =
 				AstMainContainer
 				?.MatchingNodesFromSubtreeBreadthFirst(node => node?.PyObjTypNameMatchesRegexPattern("EditPlainText") ?? false)
-				?.OrderByDescending(node => node.Grööse?.BetraagQuadriirt ?? -1)
+				?.OrderByDescending(node => node.Size?.SqrMagnitude ?? -1)
 				?.FirstOrDefault();
 
 			ErgeebnisScpezChatChannel = new WindowChatChannel(

@@ -1,5 +1,5 @@
 ﻿using Bib3;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
 
 namespace Sanderling.Accumulation
@@ -8,7 +8,7 @@ namespace Sanderling.Accumulation
 	{
 		MemoryStruct.IShipUiModule Module { get; }
 
-		Vektor2DInt? Location { get; }
+		Vector2i? Location { get; }
 	}
 
 	public interface IShipUiModule : IEntityWithHistory<IShipUiModuleAndContext>, IEntityScoring<IShipUiModuleAndContext, Parse.IMemoryMeasurement>, MemoryStruct.IShipUiModule, IRepresentingMemoryObject

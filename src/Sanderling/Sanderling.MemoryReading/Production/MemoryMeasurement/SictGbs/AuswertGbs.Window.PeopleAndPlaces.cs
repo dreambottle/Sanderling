@@ -54,7 +54,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			var tInspektSearchStringAst =
 				AstMainContainer?.FirstMatchingNodeFromSubtreeBreadthFirst(k => Regex.Match(k?.LabelText() ?? "", "search", RegexOptions.IgnoreCase).Success);
 
-			var ListView = SetScrollAst?.FirstOrDefault()?.AlsListView<IListEntry>(SictAuswertGbsListViewport<IListEntry>.ListEntryKonstruktSctandard);
+			var ListView = SetScrollAst?.FirstOrDefault()?.AsListView<IListEntry>(SictAuswertGbsListViewport<IListEntry>.ListEntryKonstruktSctandard);
 
 			ErgeebnisScpez = new WindowPeopleAndPlaces(BaseErgeebnis)
 			{

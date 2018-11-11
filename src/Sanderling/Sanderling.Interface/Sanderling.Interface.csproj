@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compat\ColorCompat.cs" />
+    <Compile Include="Compat\GeometryCompat.cs" />
     <Compile Include="MemoryStruct\Agent.cs" />
     <Compile Include="MemoryStruct\Bracket.cs" />
     <Compile Include="MemoryStruct\Chat.cs" />
@@ -97,8 +99,12 @@
       <Version>11.0.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Compat\" />
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{701AAEFD-064A-4FA0-90D8-6F2DD7D253D3}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

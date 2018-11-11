@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Sanderling.Interface.MemoryStruct;
 using BotEngine.Common;
-using Bib3.Geometrik;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -82,7 +82,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var ListeTab =
 				MengeTab
-				?.OrderBy(tab => tab.Region.Center().A)
+				?.OrderBy(tab => tab.Region.Center().X)
 				?.ToArray();
 
 			var TabSelected =

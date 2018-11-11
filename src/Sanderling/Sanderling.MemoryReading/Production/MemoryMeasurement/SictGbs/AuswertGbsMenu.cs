@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
 using System.Text.RegularExpressions;
-using BotEngine.Interface;
 using System;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -27,7 +26,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				setEntryNode
 				?.Select(kandidaatAst => ReadMenuEntry(kandidaatAst, baseElement?.Region ?? RectInt.Empty)).ToArray();
 
-			var listEntry = setEntry?.OrdnungLabel()?.ToArray();
+			var listEntry = setEntry?.OrderByLabel()?.ToArray();
 
 			return new Menu(baseElement)
 			{
@@ -42,14 +41,12 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (!(entryNode?.VisibleIncludingInheritance ?? false))
 				return null;
 
-			var fillAst =
+			var fillNode =
 				entryNode.FirstMatchingNodeFromSubtreeBreadthFirst(kandidaat => string.Equals("Fill", kandidaat.PyObjTypName, StringComparison.InvariantCultureIgnoreCase), 2, 1) ??
 				entryNode.FirstMatchingNodeFromSubtreeBreadthFirst(kandidaat => Regex.Match(kandidaat.PyObjTypName ?? "", "Underlay", RegexOptions.IgnoreCase).Success, 2, 1);
 
-			var fillColor = fillAst == null ? null : ColorORGB.VonVal(fillAst.Color);
-
 			var entryHighlight =
-				null != fillColor ? (200 < fillColor.OMilli) : (bool?)null;
+				null != fillNode?.ColorAMili ? (200 < fillNode?.ColorAMili) : (bool?)null;
 
 			return entryNode.MenuEntry(regionConstraint, entryHighlight);
 		}

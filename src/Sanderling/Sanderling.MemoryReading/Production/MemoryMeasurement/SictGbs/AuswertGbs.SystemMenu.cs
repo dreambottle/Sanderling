@@ -59,7 +59,7 @@ namespace Optimat.EveOnline.AuswertGbs
 					2, 1);
 
 			var HeaderButtonClose =
-				AstHeaderButtonClose?.AlsSprite();
+				AstHeaderButtonClose?.AsSprite();
 
 			var ErgeebnisWindow = SystemMenuAst.Window(true, null, null, new[] { HeaderButtonClose });
 

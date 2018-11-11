@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bib3;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
-using Sanderling.MemoryReading.Production;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -23,11 +22,11 @@ namespace Optimat.EveOnline.AuswertGbs
 
 		public int? ChildLastInTreeIndex;
 
-		new public UINodeInfoInTree[] ListChild;
+		new public UINodeInfoInTree[] Children;
 
-		public Vector2DSingle? FromParentLocation;
+		public Vector2f? FromParentLocation;
 
-		override public IEnumerable<GbsNodeInfo> GetChildList() => ListChild;
+		override public IEnumerable<GbsNodeInfo> GetChildList() => Children;
 	}
 
 
@@ -70,7 +69,7 @@ namespace Optimat.EveOnline.AuswertGbs
 		static public bool EnthaltAstMitHerkunftAdrese(
 			this UINodeInfoInTree suuceWurzel,
 			Int64 astHerkunftAdrese) =>
-			suuceWurzel?.AstEnthalteInBaum((kandidaatAst) => kandidaatAst?.PyObjAddress == astHerkunftAdrese, zuZerleegende => zuZerleegende.ListChild) ?? false;
+			suuceWurzel?.AstEnthalteInBaum((kandidaatAst) => kandidaatAst?.PyObjAddress == astHerkunftAdrese, zuZerleegende => zuZerleegende.Children) ?? false;
 
 		static public bool EnthaltAst(
 			this UINodeInfoInTree suuceWurzel,
@@ -79,7 +78,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (null == node)
 				return false;
 
-			return suuceWurzel?.AstEnthalteInBaum(node, zuZerleegende => zuZerleegende.ListChild) ?? false;
+			return suuceWurzel?.AstEnthalteInBaum(node, zuZerleegende => zuZerleegende.Children) ?? false;
 		}
 
 		/// <summary>
@@ -130,17 +129,17 @@ namespace Optimat.EveOnline.AuswertGbs
 		}
 
 		static public float? LaagePlusVonParentErbeLaageA(this UINodeInfoInTree uiNode) =>
-			uiNode?.LaagePlusVonParentErbeLaage()?.A;
+			uiNode?.LaagePlusVonParentErbeLaage()?.X;
 
 		static public float? LaagePlusVonParentErbeLaageB(this UINodeInfoInTree uiNode) =>
-			uiNode?.LaagePlusVonParentErbeLaage()?.B;
+			uiNode?.LaagePlusVonParentErbeLaage()?.Y;
 
 		static public MenuEntry MenuEntry(
 			this UINodeInfoInTree menuEntryAst,
 			RectInt regionConstraint,
 			bool? highlight = null)
 		{
-			var container = menuEntryAst.AlsContainer(regionConstraint: regionConstraint);
+			var container = menuEntryAst.AsContainer(regionConstraint: regionConstraint);
 
 			if (null == container)
 				return null;

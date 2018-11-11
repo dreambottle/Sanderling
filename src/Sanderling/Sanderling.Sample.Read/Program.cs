@@ -1,8 +1,8 @@
-﻿using Bib3.Geometrik;
-using Sanderling.Interface.MemoryStruct;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
+using Commons.Geometry;
+using Sanderling.Interface.MemoryStruct;
 
 namespace Sanderling.Sample.Read
 {
@@ -72,7 +72,7 @@ namespace Sanderling.Sample.Read
 				var Center = ContextMenuFirstEntry.Region.Center();
 
 				Console.WriteLine("contextmenu first entry : label: \"" + (ContextMenuFirstEntry?.Text ?? "null") + "\", center location : " +
-					Center.A.ToString() + ", " + Center.B.ToString());
+					Center.X.ToString() + ", " + Center.Y.ToString());
 			}
 		}
 

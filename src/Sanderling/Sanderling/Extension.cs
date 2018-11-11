@@ -1,5 +1,5 @@
 ﻿using Bib3;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using Bib3.RefNezDiferenz;
 using Sanderling.Interface.MemoryStruct;
 using System;
@@ -92,21 +92,21 @@ namespace Sanderling
 			this IEnumerable<IListEntry> list) =>
 			SequenceGroupByPredicate(list, entry => entry?.IsGroup ?? false);
 
-		static public RectInt WithSizeExpandedPivotAtCenter(
+		static public RectInt ResizedPivotAtCenter(
 			this RectInt beforeExpansion,
 			int expansion) =>
-			beforeExpansion.WithSizeExpandedPivotAtCenter(new Vektor2DInt(expansion, expansion));
+			beforeExpansion.ResizedPivotAtCenter(new Vector2i(expansion, expansion));
 
 		static public IEnumerable<RectInt> SubstractionRemainder(
 			this RectInt minuend,
-			RectInt subtrahend) => minuend.Diferenz(subtrahend);
+			RectInt subtrahend) => minuend.DiffRectangles(subtrahend);
 
-		static public Vektor2DInt RandomPointInRectangle(
+		static public Vector2i RandomPointInRectangle(
 			this RectInt rectangle,
 			Random random) =>
-			new Vektor2DInt(
-				rectangle.Min0 + (random.Next() % Math.Max(1, rectangle.Max0 - rectangle.Min0)),
-				rectangle.Min1 + (random.Next() % Math.Max(1, rectangle.Max1 - rectangle.Min1)));
+			new Vector2i(
+				rectangle.X0 + (random.Next() % Math.Max(1, rectangle.X1 - rectangle.X0)),
+				rectangle.Y0 + (random.Next() % Math.Max(1, rectangle.Y1 - rectangle.Y0)));
 
 		static public IEnumerable<RectInt> SubstractionRemainder(
 			this RectInt minuend,

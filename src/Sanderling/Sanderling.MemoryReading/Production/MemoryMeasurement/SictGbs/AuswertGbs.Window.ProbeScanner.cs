@@ -44,7 +44,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				?.LastOrDefault();
 
 			var listView =
-				scanResultScrollAst?.AlsListView(
+				scanResultScrollAst?.AsListView(
 				(node, setHeader, regionConstraint) => SictAuswertGbsListViewport<IListEntry>.ListEntryKonstruktSctandard(node, setHeader, regionConstraint, ListEntryTrenungZeleTypEnum.Ast));
 
 			ErgeebnisWindowProbeScanner =

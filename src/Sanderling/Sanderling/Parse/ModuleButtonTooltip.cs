@@ -1,5 +1,4 @@
 ﻿using Bib3;
-using Bib3.Geometrik;
 using BotEngine.Common;
 using System;
 using System.Linq;
@@ -7,6 +6,7 @@ using WindowsInput.Native;
 using MemoryStruct = Sanderling.Interface.MemoryStruct;
 using Sanderling.Interface.MemoryStruct;
 using System.Collections.Generic;
+using Commons.Geometry;
 
 namespace Sanderling.Parse
 {
@@ -182,7 +182,7 @@ namespace Sanderling.Parse
 
 			SignatureRadiusModifierMilli = (int?)MatchFromLabelWithRegexPattern(@"(" + Number.DefaultNumberFormatRegexPatternAllowLeadingAndTrailingChars + @")\s*%\s*Signature\s*Radius\s*(Modifier|Bonus)")?.Groups[1]?.Value?.NumberParseDecimalMilli() / 100;
 
-			ToggleKeyTextLabel = raw?.LabelText?.OrderByNearestPointOnLine(new Vektor2DInt(-1, 1), label => label?.RegionCenter())?.FirstOrDefault();
+			ToggleKeyTextLabel = raw?.LabelText?.OrderByNearestPointOnLine(new Vector2i(-1, 1), label => label?.RegionCenter())?.FirstOrDefault();
 			ToggleKey = ToggleKeyTextLabel?.Text?.ListKeyCodeFromUIText()?.ToArray();
 		}
 	}

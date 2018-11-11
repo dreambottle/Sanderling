@@ -148,7 +148,7 @@ namespace Optimat.EveOnline.AuswertGbs
 								return -1;
 							}
 
-							return LaagePlusVonParentErbeLaage.Value.B;
+							return LaagePlusVonParentErbeLaage.Value.Y;
 						})
 					.ToArray();
 			}
@@ -156,7 +156,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			if (null != AstTextContTextMengeLabel &&
 				null != AstTextContText)
 			{
-				if (AstTextContText.Grööse.HasValue)
+				if (AstTextContText.Size.HasValue)
 				{
 					AstTextContTextMengeLabelLinx =
 						AstTextContTextMengeLabel
@@ -167,7 +167,7 @@ namespace Optimat.EveOnline.AuswertGbs
 									return false;
 								}
 
-								return Kandidaat.PositionInParent.Value.A < AstTextContText.Grööse.Value.A * 0.5;
+								return Kandidaat.PositionInParent.Value.X < AstTextContText.Size.Value.X * 0.5;
 							})
 						.ToArray();
 				}
@@ -202,7 +202,7 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			var Ergeebnis = new LobbyAgentEntry(TextContAst.AsUIElementIfVisible())
 			{
-				LabelText = AstAgentEntry?.ExtraktMengeLabelString()?.OrdnungLabel()?.ToArray(),
+				LabelText = AstAgentEntry?.ExtraktMengeLabelString()?.OrderByLabel()?.ToArray(),
 				StartConversationButton = StartConversationButton,
 			};
 

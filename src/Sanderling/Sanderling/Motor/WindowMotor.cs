@@ -1,5 +1,5 @@
 ﻿using Bib3;
-using Bib3.Geometrik;
+using Commons.Geometry;
 using BotEngine.Motor;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Sanderling.Motor
 		/// <summary>
 		/// For some reason, the mouse positions seem to be offset when moving the mouse in the window client area.
 		/// </summary>
-		static public Vektor2DInt MouseOffsetStatic = new Vektor2DInt(2, 2);
+		static public Bib3.Geometrik.Vektor2DInt MouseOffsetStatic = new Bib3.Geometrik.Vektor2DInt(2, 2);
 
 		public WindowMotor(IntPtr windowHandle)
 		{

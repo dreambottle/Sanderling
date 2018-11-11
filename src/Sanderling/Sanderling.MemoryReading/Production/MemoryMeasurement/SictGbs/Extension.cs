@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Bib3;
-using BotEngine.Interface;
+using Commons.Geometry;
 using Sanderling.Interface.MemoryStruct;
-using Bib3.Geometrik;
-using Sanderling.MemoryReading.Production;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
 	static public class Extension
 	{
-		static public Vektor2DInt AlsVektor2DInt(
-			this Vector2DSingle vector2DSingle) =>
-			new Vektor2DInt((Int64)vector2DSingle.A, (Int64)vector2DSingle.B);
+		static public Vector2i AsVector2i(
+			this Vector2f vector2f) =>
+			new Vector2i((int)vector2f.X, (int)vector2f.Y);
 
 		static readonly Bib3.RefNezDiferenz.SictTypeBehandlungRictliinieMitTransportIdentScatescpaicer
 			KonvertGbsAstInfoRictliinieMitScatescpaicer =
@@ -79,7 +77,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				tiifeMin);
 		}
 
-		static public Vector2DSingle? LaagePlusVonParentErbeLaage(
+		static public Vector2f? LaagePlusVonParentErbeLaage(
 			this UINodeInfoInTree node)
 		{
 			var VonParentErbeLaage = node?.FromParentLocation;
@@ -97,7 +95,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			this UINodeInfoInTree node,
 			ref int inBaumAstIndexZääler,
 			int? tiifeMax = null,
-			Vector2DSingle? vonParentErbeLaage = null,
+			Vector2f? vonParentErbeLaage = null,
 			float? vonParentErbeClippingFläceLinx = null,
 			float? vonParentErbeClippingFläceOobn = null,
 			float? vonParentErbeClippingFläceRecz = null,
@@ -115,7 +113,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			var FürChildVonParentErbeLaage = node.PositionInParent;
 
 			var LaagePlusVonParentErbeLaage = node.LaagePlusVonParentErbeLaage();
-			var Grööse = node.Grööse;
+			var Grööse = node.Size;
 
 			var FürChildVonParentErbeClippingFläceLinx = vonParentErbeClippingFläceLinx;
 			var FürChildVonParentErbeClippingFläceOobn = vonParentErbeClippingFläceOobn;
@@ -124,10 +122,10 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			if (LaagePlusVonParentErbeLaage.HasValue && Grööse.HasValue)
 			{
-				FürChildVonParentErbeClippingFläceLinx = Bib3.Glob.Max(FürChildVonParentErbeClippingFläceLinx, LaagePlusVonParentErbeLaage.Value.A);
-				FürChildVonParentErbeClippingFläceRecz = Bib3.Glob.Min(FürChildVonParentErbeClippingFläceRecz, LaagePlusVonParentErbeLaage.Value.A);
-				FürChildVonParentErbeClippingFläceOobn = Bib3.Glob.Max(FürChildVonParentErbeClippingFläceOobn, LaagePlusVonParentErbeLaage.Value.B);
-				FürChildVonParentErbeClippingFläceUntn = Bib3.Glob.Min(FürChildVonParentErbeClippingFläceUntn, LaagePlusVonParentErbeLaage.Value.B);
+				FürChildVonParentErbeClippingFläceLinx = Bib3.Glob.Max(FürChildVonParentErbeClippingFläceLinx, LaagePlusVonParentErbeLaage.Value.X);
+				FürChildVonParentErbeClippingFläceRecz = Bib3.Glob.Min(FürChildVonParentErbeClippingFläceRecz, LaagePlusVonParentErbeLaage.Value.X);
+				FürChildVonParentErbeClippingFläceOobn = Bib3.Glob.Max(FürChildVonParentErbeClippingFläceOobn, LaagePlusVonParentErbeLaage.Value.Y);
+				FürChildVonParentErbeClippingFläceUntn = Bib3.Glob.Min(FürChildVonParentErbeClippingFläceUntn, LaagePlusVonParentErbeLaage.Value.Y);
 			}
 
 			if (vonParentErbeLaage.HasValue)
@@ -142,7 +140,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				}
 			}
 
-			var ListeChild = node.ListChild;
+			var ListeChild = node.Children;
 
 			for (int ChildIndex = 0; ChildIndex < ListeChild?.Length; ChildIndex++)
 			{
@@ -218,12 +216,12 @@ namespace Optimat.EveOnline.AuswertGbs
 
 			foreach (var LabelAst in mengeLabelSictbar.EmptyIfNull())
 			{
-				var labelAstGrööse = LabelAst?.Grööse;
+				var labelAstGrööse = LabelAst?.Size;
 
 				if (!labelAstGrööse.HasValue)
 					continue;
 
-				if ((bisherBeste?.Grööse.Value.BetraagQuadriirt ?? -1) < labelAstGrööse.Value.BetraagQuadriirt)
+				if ((bisherBeste?.Size.Value.SqrMagnitude ?? -1) < labelAstGrööse.Value.SqrMagnitude)
 					bisherBeste = LabelAst;
 			}
 
@@ -277,80 +275,80 @@ namespace Optimat.EveOnline.AuswertGbs
 			return Bib3.Glob.SuuceFlacMengeAstMitPfaad(
 				rootNode,
 				predicate,
-				node => node.ListChild,
+				node => node.Children,
 				ListeFundAnzaalScrankeMax,
 				depthBoundMax,
 				depthBoundMin,
 				omitNodesBelowNodesMatchingPredicate);
 		}
 
-		static public Vector2DSingle? GrööseMaxAusListeChild(
-			this UINodeInfoInTree Ast)
+		static public Vector2f? SizeMaxOfListChildren(
+			this UINodeInfoInTree node)
 		{
-			if (null == Ast)
+			if (null == node)
 			{
 				return null;
 			}
 
-			Vector2DSingle? GrööseMax = null;
+			Vector2f? sizeMax = null;
 
-			var ThisGrööse = Ast.Grööse;
+			var thisSize = node.Size;
 
-			if (ThisGrööse.HasValue)
+			if (thisSize.HasValue)
 			{
-				GrööseMax = ThisGrööse;
+				sizeMax = thisSize;
 			}
 
-			var ListeChild = Ast.ListChild;
+			var ListeChild = node.Children;
 
 			if (null != ListeChild)
 			{
 				foreach (var Child in ListeChild)
 				{
-					var ChildGrööse = Child.Grööse;
+					var ChildSize = Child.Size;
 
-					if (ChildGrööse.HasValue)
+					if (ChildSize.HasValue)
 					{
-						if (GrööseMax.HasValue)
+						if (sizeMax.HasValue)
 						{
-							GrööseMax = new Vector2DSingle(
-								Math.Max(GrööseMax.Value.A, ChildGrööse.Value.A),
-								Math.Max(GrööseMax.Value.B, ChildGrööse.Value.B));
+							sizeMax = new Vector2f(
+								Math.Max(sizeMax.Value.X, ChildSize.Value.X),
+								Math.Max(sizeMax.Value.Y, ChildSize.Value.Y));
 						}
 						else
 						{
-							GrööseMax = ChildGrööse;
+							sizeMax = ChildSize;
 						}
 					}
 				}
 			}
 
-			return GrööseMax;
+			return sizeMax;
 		}
 
-		static string[] UIRootVorgaabeGrööseListeName = new string[] { "l_main", "l_viewstate" };
+		static string[] UIRootSizeListNames = new string[] { "l_main", "l_viewstate" };
 
-		static public Vector2DSingle? GrööseAusListeChildFürScpezUIRootBerecne(
-			this UINodeInfoInTree Ast)
+		static public Vector2f? SizeOfListChildForSpecUIRootBranch(
+			this UINodeInfoInTree node)
 		{
-			if (null == Ast)
+			if (null == node)
 			{
 				return null;
 			}
 
-			var ListeChild = Ast.ListChild;
+			var ListeChild = node.Children;
 
 			if (null != ListeChild)
 			{
 				foreach (var Child in ListeChild)
 				{
-					var ChildGrööse = Child.Grööse;
+					var ChildSize = Child.Size;
 
-					if (ChildGrööse.HasValue)
+					if (ChildSize.HasValue)
 					{
-						if (UIRootVorgaabeGrööseListeName.Any((AstNaame) => string.Equals(AstNaame, Child.Name)))
+						if (UIRootSizeListNames.Any((nodeName) => string.Equals(nodeName, Child.Name)))
 						{
-							return ChildGrööse;
+							return ChildSize;
 						}
 					}
 				}
@@ -401,26 +399,26 @@ namespace Optimat.EveOnline.AuswertGbs
 				buttonAstUndLabelAst?.LabelAst?.LabelText()))
 			?.Where(kandidaat => !(kandidaat?.Text).IsNullOrEmpty());
 
-		static public IEnumerable<T> OrdnungLabel<T>(
-			this IEnumerable<T> Menge)
+		static public IEnumerable<T> OrderByLabel<T>(
+			this IEnumerable<T> labels)
 			where T : IUIElement =>
-			Menge
-			?.OrderBy(element => ((element?.Region)?.Center())?.B ?? int.MaxValue)
-			?.ThenBy(element => ((element?.Region)?.Center())?.A ?? int.MaxValue);
+			labels
+			?.OrderBy(element => ((element?.Region)?.Center())?.Y ?? int.MaxValue)
+			?.ThenBy(element => ((element?.Region)?.Center())?.X ?? int.MaxValue);
 
-		static public Sprite AlsSprite(
-			this UINodeInfoInTree GbsAst) =>
-			!(GbsAst?.VisibleIncludingInheritance ?? false) ? null :
-			new Sprite(GbsAst.AsUIElementIfVisible())
+		static public Sprite AsSprite(
+			this UINodeInfoInTree gbsNode) =>
+			!(gbsNode?.VisibleIncludingInheritance ?? false) ? null :
+			new Sprite(gbsNode.AsUIElementIfVisible())
 			{
-				Name = GbsAst?.Name,
-				Color = GbsAst?.Color.AsColorORGBIfAnyHasValue(),
-				Texture0Id = GbsAst?.TextureIdent0?.AsObjectIdInMemory(),
-				HintText = GbsAst?.Hint,
-				TexturePath = GbsAst?.texturePath,
+				Name = gbsNode?.Name,
+				Color = gbsNode.Color,
+				Texture0Id = gbsNode?.TextureIdent0?.AsObjectIdInMemory(),
+				HintText = gbsNode?.Hint,
+				TexturePath = gbsNode?.texturePath,
 			};
 
-		static public ListViewAndControl<EntryT> AlsListView<EntryT>(
+		static public ListViewAndControl<EntryT> AsListView<EntryT>(
 			this UINodeInfoInTree ListViewportAst,
 			Func<UINodeInfoInTree, IColumnHeader[], RectInt?, EntryT> CallbackListEntryConstruct = null,
 			ListEntryTrenungZeleTypEnum? InEntryTrenungZeleTyp = null)
@@ -441,7 +439,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			RectInt constraint) =>
 			original?.WithRegion(original.Region.Intersection(constraint));
 
-		static public Container AlsContainer(
+		static public Container AsContainer(
 			this UINodeInfoInTree containerNode,
 			bool treatIconAsSprite = false,
 			RectInt? regionConstraint = null)
@@ -467,11 +465,11 @@ namespace Optimat.EveOnline.AuswertGbs
 					return new UIElementInputText(textBoxAst.AsUIElementIfVisible(), LabelText);
 				})
 				?.WhereNotDefault()
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArrayIfNotEmpty();
 
 			var ListeButton =
-				containerNode?.ExtraktMengeButtonLabelString()?.OrdnungLabel()
+				containerNode?.ExtraktMengeButtonLabelString()?.OrderByLabel()
 				?.ToArrayIfNotEmpty();
 
 			var ListeButtonAst = ListeButton?.Select(button => containerNode.FirstNodeWithPyObjAddressFromSubtreeBreadthFirst(button.Id))?.ToArray();
@@ -483,12 +481,12 @@ namespace Optimat.EveOnline.AuswertGbs
 			var ListeLabelText =
 				containerNode?.ExtraktMengeLabelString()
 				?.WhereNitEnthalte(LabelContainerAussclus)
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArrayIfNotEmpty();
 
 			var setSprite =
 				containerNode.SetSpriteFromChildren(treatIconAsSprite)
-				?.OrdnungLabel()
+				?.OrderByLabel()
 				?.ToArrayIfNotEmpty();
 
 			var baseElement = containerNode.AsUIElementIfVisible();
@@ -511,12 +509,12 @@ namespace Optimat.EveOnline.AuswertGbs
 			uiNode?.MatchingNodesFromSubtreeBreadthFirst(c =>
 				(c?.PyObjTypNameIsSprite() ?? false) ||
 				(treatIconAsSprite && (c?.PyObjTypNameIsIcon() ?? false)), null, null, null, true)
-				?.Select(spriteNode => spriteNode?.AlsSprite())
+				?.Select(spriteNode => spriteNode?.AsSprite())
 				?.WhereNotDefault();
 
 		static public IInSpaceBracket AsInSpaceBracket(this UINodeInfoInTree node)
 		{
-			var container = node?.AlsContainer();
+			var container = node?.AsContainer();
 
 			if (null == container)
 				return null;
@@ -539,7 +537,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			var AstExpanded =
 				GbsAst?.FirstMatchingNodeFromSubtreeBreadthFirst(k => k.PyObjTypNameMatchesRegexPatternIgnoreCase("ExpandedUtilMenu"));
 
-			return AstExpanded?.AlsContainer();
+			return AstExpanded?.AsContainer();
 		}
 
 		static public Func<Int64, IEnumerable<KeyValuePair<string, SictAuswertPythonObj>>> FunkEnumDictEntry;
@@ -552,10 +550,7 @@ namespace Optimat.EveOnline.AuswertGbs
 			MengeKandidaat?.Where(Kandidaat => !(MengeContainerZuMaide?.Any(ContainerZuMaide =>
 			new AstT[] { ContainerZuMaide }.ConcatNullable(ContainerZuMaide.EnumerateChildNodeTransitiveHüle()).Any(ContainerZuMaideChild => ContainerZuMaideChild.PyObjAddress == Kandidaat.Id)) ?? false));
 
-		static public ColorORGB AlsColorORGB(this ColorORGBVal? Color) =>
-			Color.HasValue ? new ColorORGB(Color) : null;
-
 		static public IEnumerable<NodeT> OrderByRegionSizeDescending<NodeT>(this IEnumerable<NodeT> seq)
-			where NodeT : GbsNodeInfo => seq?.OrderByDescending(node => node?.Grööse?.Betraag ?? -1);
+			where NodeT : GbsNodeInfo => seq?.OrderByDescending(node => node?.Size?.Magnitude ?? -1);
 	}
 }

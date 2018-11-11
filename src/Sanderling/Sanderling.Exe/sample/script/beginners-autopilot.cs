@@ -21,7 +21,7 @@ while(true)
 	//	We assume this is the one which is nearest to the topleft corner of the Screen which is at (0,0)
 	var RouteElementMarkerNext =
 		Measurement?.InfoPanelRoute?.RouteElementMarker
-		?.OrderByCenterDistanceToPoint(new Vektor2DInt(0, 0))?.FirstOrDefault();
+		?.OrderByCenterDistanceToPoint(new Vector2i(0, 0))?.FirstOrDefault();
 
 	if(null == RouteElementMarkerNext)
 	{

@@ -8,9 +8,9 @@ namespace Optimat.EveOnline
 	{
 		public const int AusDictRenderObjectRefVersazNaacRenderObjectBlok = -8;
 
-		readonly public List<SictAuswertPyObj32GbsAstZuusctand> ListeChild = new List<SictAuswertPyObj32GbsAstZuusctand>();
+		readonly public List<SictAuswertPyObj32GbsAstZuusctand> Children = new List<SictAuswertPyObj32GbsAstZuusctand>();
 
-		readonly public GbsNodeInfo AstInfo = new GbsNodeInfo();
+		readonly public GbsNodeInfo NodeInfo = new GbsNodeInfo();
 
 		[SictInPyDictEntryKeyAttribut(Optimat.EveOnline.SictProzesAuswertZuusctand.GbsAstSclüselParentRefString)]
 		public SictAuswertPyObj32Zuusctand DictEntryParentRef;
@@ -114,14 +114,14 @@ namespace Optimat.EveOnline
 		{
 			DictListeEntryAnzaalScrankeMax = 0x1000;
 
-			AstInfo.PyObjAddress = HerkunftAdrese;
+			NodeInfo.PyObjAddress = HerkunftAdrese;
 		}
 
 		public void ListeChildPropagiireNaacInfoObjekt()
 		{
-			AstInfo.ListChild =
-				this.ListeChild
-				?.Select((ChildObj) => ChildObj?.AstInfo)
+			NodeInfo.Children =
+				this.Children
+				?.Select((ChildObj) => ChildObj?.NodeInfo)
 				?.Reverse()
 				?.ToArray();
 		}

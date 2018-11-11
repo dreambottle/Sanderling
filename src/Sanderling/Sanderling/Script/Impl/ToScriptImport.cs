@@ -17,12 +17,18 @@ namespace Sanderling.Script.Impl
 		static readonly Type[] AssemblyAndNamespaceAdditionType = new[]
 		{
 			typeof(List<>),
+			typeof(HashSet<>),
 			typeof(System.Text.RegularExpressions.Regex),
 			typeof(Uri),
 			typeof(Enumerable),
 			typeof(IHostToScript),
 			typeof(BotSharp.ToScript.IHostToScript),
 			typeof(Bib3.Geometrik.Vektor2DInt),
+			typeof(Commons.Geometry.Vector2i),
+			typeof(Commons.Geometry.Vector2f),
+			typeof(Commons.Geometry.Vector3i),
+			typeof(Commons.Geometry.RectInt),
+			typeof(Sanderling.Interface.Compat.GeometryCompat),
 			typeof(ObjectIdInt64),
 			typeof(FromProcessMeasurement<>),
 			typeof(MemoryStruct.IMemoryMeasurement),

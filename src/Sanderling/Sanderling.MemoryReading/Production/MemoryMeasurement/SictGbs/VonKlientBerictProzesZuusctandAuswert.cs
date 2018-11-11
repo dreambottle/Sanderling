@@ -5,6 +5,7 @@ using Bib3;
 using Sanderling.Interface.MemoryStruct;
 using BotEngine.Common;
 using System.Collections.Generic;
+using Commons.Geometry;
 
 namespace Optimat.EveOnline.AuswertGbs
 {
@@ -352,7 +353,7 @@ namespace Optimat.EveOnline.AuswertGbs
 				GbsBaumWurzel.MatchingNodesFromSubtreeBreadthFirst(k => k?.PyObjTypNameMatchesRegexPattern("TooltipGeneric|TooltipPanel") ?? false);
 
 			var SetTooltip =
-				SetTooltipNode?.Select(TooltipNode => TooltipNode?.AlsContainer())?.WhereNotDefault()?.ToArrayIfNotEmpty();
+				SetTooltipNode?.Select(TooltipNode => TooltipNode?.AsContainer())?.WhereNotDefault()?.ToArrayIfNotEmpty();
 
 			ModuleButtonHintAst =
 			   Optimat.EveOnline.AuswertGbs.Extension.FirstMatchingNodeFromSubtreeBreadthFirst(
@@ -484,11 +485,11 @@ namespace Optimat.EveOnline.AuswertGbs
 				Ergeebnis.SystemMenu = SystemmenuAuswert.Ergeebnis;
 			}
 
-			var AstLayerMainGrööse = AstLayerMain?.Grööse;
+			var AstLayerMainGrööse = AstLayerMain?.Size;
 
 			if (AstLayerMainGrööse.HasValue)
 			{
-				Ergeebnis.ScreenSize = new Bib3.Geometrik.Vektor2DInt((int)AstLayerMainGrööse.Value.A, (int)AstLayerMainGrööse.Value.B);
+				Ergeebnis.ScreenSize = new Vector2i((int)AstLayerMainGrööse.Value.X, (int)AstLayerMainGrööse.Value.Y);
 			}
 
 			if (null != ModuleButtonTooltipAuswert)

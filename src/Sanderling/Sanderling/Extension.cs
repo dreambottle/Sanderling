@@ -213,6 +213,6 @@ namespace Sanderling
 			GetOccludingUIElementAndRemainingRegion(occludedElement, uiTree)
 			?.Where(occludingElementAndRemainingRegion => !(callbackExclude?.Invoke(occludingElementAndRemainingRegion.Key) ?? false))
 			?.Select(occludingElementAndRemainingRegion => occludingElementAndRemainingRegion.Key.Region));
-        
+
 	}
 }

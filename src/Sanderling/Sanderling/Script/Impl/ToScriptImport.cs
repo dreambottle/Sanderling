@@ -28,7 +28,7 @@ namespace Sanderling.Script.Impl
 			typeof(Commons.Geometry.Vector2f),
 			typeof(Commons.Geometry.Vector3i),
 			typeof(Commons.Geometry.RectInt),
-			typeof(Sanderling.Interface.Compat.GeometryCompat),
+			typeof(Interface.Compat.GeometryCompat),
 			typeof(ObjectIdInt64),
 			typeof(FromProcessMeasurement<>),
 			typeof(MemoryStruct.IMemoryMeasurement),
@@ -44,6 +44,9 @@ namespace Sanderling.Script.Impl
 		static readonly Type[] NamespaceStaticAdditionType = new[]
 		{
 			typeof(Bib3.Extension),
+			typeof(Interface.Compat.GeometryCompat),
+			typeof(Commons.Geometry.Vector2i),
+			typeof(Commons.Geometry.RectInt),
 		};
 
 		static IEnumerable<Type> AssemblyAdditionType => new[]
